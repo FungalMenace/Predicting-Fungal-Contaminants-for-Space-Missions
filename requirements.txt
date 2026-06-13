@@ -1,0 +1,34 @@
+# Core scientific libraries
+pandas
+numpy
+matplotlib
+scipy
+
+# Excel and spreadsheet handling
+openpyxl
+xlrd
+
+# Sequence and BLAST analysis
+biopython
+
+# HTTP and data retrieval
+requests
+
+# File format conversions and document generation
+pypandoc
+reportlab
+odfpy
+python-docx
+python-pptx
+openpyxl
+
+# Data visualization
+seaborn
+
+# Testing
+pytest
+
+tqdm
+argparse
+
+beautifulsoup4

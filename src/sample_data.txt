@@ -1,0 +1,10 @@
+Candida albicans
+Aspergillus fumigatus
+Cryptococcus neoformans
+Fusarium oxysporum
+Saccharomyces cerevisiae
+Aspergillus niger
+Trichophyton rubrum
+Penicillium chrysogenum
+Histoplasma capsulatum
+Blastomyces dermatitidis

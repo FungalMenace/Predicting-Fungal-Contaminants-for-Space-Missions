@@ -1,0 +1,34 @@
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fungi-pipeline"
+version = "0.1.0"
+description = "Modular fungal contamination pipeline extracted from notebooks"
+authors = [{name = "Your Name"}]
+requires-python = ">=3.9"
+dependencies = [
+    "requests>=2.31.0",
+    "pandas>=2.0.0",
+    "numpy>=1.24.0",
+    "biopython>=1.83",
+]
+
+[tool.setuptools.packages.find]
+include = ["fungi_pipeline*"]
+
+[tool.black]
+line-length = 100
+target-version = ["py39", "py310", "py311"]
+exclude = ["data"]
+
+[tool.ruff]
+line-length = 100
+select = ["E", "F", "I"]
+ignore = []
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
