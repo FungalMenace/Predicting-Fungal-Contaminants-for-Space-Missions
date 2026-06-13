@@ -52,15 +52,15 @@ pip install -r requirements.txt
 
 Depending on your use case, we have divided the documentation into three dedicated guides:
 
-### 1. [Reproducing the Paper Results](https://www.google.com/search?q=docs/REPRODUCING.md)
+### 1. [Reproducing the Paper Results](docs/REPRODUCING.md)
 
 Step-by-step instructions on how to use the scripts in the `src/` folder to download the 1583 FASTA files, run the BLASTp alignments, calculate the scores, and generate the exact plots and Excel summaries presented in our study.
 
-### 2. [Extending the Pipeline (General Use)](https://www.google.com/search?q=docs/EXTENSION.md)
+### 2. [Extending the Pipeline (General Use)](docs/EXTENSION.md)
 
 Instructions for researchers who want to use this pipeline for their own data. Learn how to add new fungal FASTA files, input different query proteins, and generate custom contamination potential reports.
 
-### 3. [Streamlit Interactive Web App](https://www.google.com/search?q=docs/STREAMLIT_GUIDE.md)
+### 3. [Streamlit Interactive Web App](docs/STREAMLIT_GUIDE.md)
 
 Information on how to access and use our interactive web application to search for specific species or upload your own `.fasta` files for dynamic scoring.
 
