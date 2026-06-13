@@ -59,6 +59,8 @@ python -m src.fungi_pipeline.utils \
 
 This will generate a unified folder named `final_extracted_fastas/`.
 
+`Google drive link containing fasta files: [sample link]`
+
 ---
 
 ## Step 2: BLASTp Automation and Initial Scoring
