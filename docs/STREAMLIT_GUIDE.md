@@ -1,117 +1,83 @@
-# Fungal Contamination Checker (Streamlit App)
+# Fungal Contamination Checker
 
-<!-- [⬅ Back to Main README](../README.md) -->
+A Streamlit dashboard that flags likely fungal contaminants in a sequencing
+or microbiome dataset by scoring observed species against a curated database
+of risk-relevant properties.
 
-Welcome to the **Fungal Contamination Checker**. This interactive Streamlit application allows researchers, astrobiologists, and microbiologists to compare Fungi sequencing data against a curated list of organisms with specific stress-resistance and pathogenicity properties. 
+Built on top of the upstream [FungalContaminants](https://github.com/AshishMahabal/FungalContaminants)
+tool used at Caltech / TRISH / NASA-CSIF.
 
-Users can adjust contamination weights, set custom thresholds, and filter Fungi data based on environmental location counts and other adaptive properties.
+## What it does
 
-👉 **Access the Live App:** [Fungal Contamination Checker](https://fungalcontaminants.streamlit.app)
+You provide a CSV of species detected across one or more locations
+(read counts per location). The app:
 
----
+1. **Matches** each input species against a curated database of ~1,500
+   fungi annotated with six contamination-relevant properties:
+   antimicrobial resistance, biofilm formation, human pathogenicity,
+   thermophily, radiation resistance, spore formation.
+2. **Scores** each match using tri-valued evidence per property:
+   - `0` — property not observed
+   - `1` — observed at ≥35% sequence identity (weak evidence)
+   - `2` — observed at ≥75% sequence identity (strong evidence)
+3. **Filters** by two thresholds: minimum weighted score, and minimum
+   read count in at least one location.
+4. **Visualises** what's flagged: a sortable table, an interactive
+   sunburst (Phyla → Species), and per-property breakdowns.
 
-## ✨ Key Features
+The score is a weighted sum: `score = Σ weight[prop] × evidence[prop]`.
+Weights default to 1 per property, adjustable in the sidebar (0 ignores a
+property; 2 double-weights it).
 
-- **Upload Your Own CSV**: Easily upload your own Fungi dataset in CSV format for direct comparison against our curated database.
-- **Adjust Contamination Weights**: Fine-tune weights for various Fungi properties (e.g., radiation resistance, biofilm formation) to customize the risk filtering process.
-- **Set Custom Thresholds**: Use interface controls to set specific contamination score and location count thresholds.
-- **Dynamic Output Display**: Choose to recompute results automatically or manually based on user inputs.
-- **Visualize Filtered Results**: View filtered fungi lists, summary statistics, and dynamic tables based on your configurations.
-- **Venn Diagram Visualization**: Generate and download Venn diagrams to visualize the distribution of contributing traits among the filtered fungal species.
+## Inputs
 
----
+A CSV with the species name in the first column and read counts in the
+remaining columns. Group entries (`Genus sp.`) are expanded against the
+curated database; their score is aggregated across the genus by mean
+(default), max, or sum.
 
-## 📁 Input File Format
+```
+#Datasets,loc1,loc2,loc3
+Candida albicans,200,1240,0
+Aspergillus sp.,300,4240,0
+```
 
-To use this app effectively, please ensure your input CSV file adheres to the following format:
+## Running locally
 
-### Example Input CSV Format
+```bash
+cd app
+pip install -r requirements.txt
+streamlit run main.py
+```
 
-| Species                      | loc1 | loc2 | loc3  | ...   |
-|------------------------------|------|------|-------|-------|
-| Aaosphaeria arxii CBS 175.79 | 200  | 1240 | 0     | ...   |
-| Absidia caerulea NRRL1315    | 300  | 4240 | 0     | ...   |
-| Absidia repens NRRL 1336     | 2200 | 1240 | 10000 | ...   |
-| ...                          | ...  | ...  | ...   | ...   |
+Tests:
 
-#### Input File Requirements
-1. **`Species` Column**: The first column must contain the names of the fungi species (e.g., `#Datasets` or `Species`).
-2. **Location Columns**: Subsequent columns (e.g., `loc1`, `loc2`, `loc3`, etc.) should represent different sampling locations. Each cell under these columns must contain numeric values representing the number of measurements (reads) for the corresponding fungi found at that location.
+```bash
+cd app
+python -m pytest tests/
+```
 
----
+## Project layout
 
-## ⚙️ What the App Does
+```
+app/
+├── main.py              # Streamlit UI (sidebar config + main results pane)
+├── core/
+│   ├── checker.py       # Pure scoring/filtering logic
+│   └── viz_prep.py      # Pure dataframe prep for charts
+├── data/
+│   ├── curated_fungi_both.csv   # Merged tri-valued curated DB
+│   ├── score_weights.txt
+│   └── samples/         # Bundled sample inputs
+└── tests/               # pytest suite
+scripts/                 # One-off data-prep helpers (merge, query, score)
+FungalContaminants/      # Upstream clone, read-only reference
+```
 
-1. **Data Comparison**: Compares the input fungi species against our curated list (`curated_fungi.csv`), which includes properties such as radiation resistance, biofilm formation, spore formation, and pathogenicity.
-2. **Adjust Weights for Contamination Properties**: Users can adjust the mathematical weights for different properties used to calculate the final A-score/S-score. A default weights file (`score_weights.txt`) is provided, and users can upload their own JSON file with custom weights.
-3. **Set Thresholds for Filtering**:
-   - **Score Threshold**: Determines which fungi species are flagged based on their stress-resistance properties.
-   - **Reads Threshold**: A threshold for the minimum number of measurements in a location column that a species must exceed to be included in the output.
-4. **Dynamic Recalculation**: Users can select whether to automatically recompute results when settings are changed or manually trigger the computation to save processing time.
+## Credits
 
----
-
-## 📊 Outputs Explained
-
-### 1. Statistics Table
-This table provides a high-level summary of the comparison and filtering results:
-- **Num**: The total number of fungi in the uploaded list.
-- **Matched**: The number of fungi whose names match those in the curated database.
-- **Above Threshold**: The number of fungi that meet the selected thresholds for both the contamination score and location read count.
-
-### 2. Filtered Fungi List
-Displays a detailed table with fungi that pass both the score and reads thresholds. This table contains:
-- **Species**: Name of the fungi species.
-- **Score**: The weighted contamination score based on their ortholog properties.
-- **Num loc**: The number of locations where the reads (measurements) exceed the selected threshold.
-- **Locations**: A dictionary showing the location names and their corresponding counts that exceed the threshold.
-
----
-
-## 🚀 How to Use the App
-
-1. **Navigate to the “Input Data” Tab**
-   The app begins in the **“Input Data”** tab, organized into three subtabs for better control:
-   * 📂 **Input File**
-   * ⚖️ **Weights**
-   * 🎚️ **Thresholds**
-
-2. **Select Identity Threshold (Curated List)**
-   In the **Input File** subtab, choose the ortholog identity threshold for the curated database:
-   * **ID thresh = 35** (less strict match, captures distant orthologs)
-   * **ID thresh = 75** (more conservative match, requires high sequence identity)
-
-3. **Upload or Use Sample Data**
-   * Check the box to use the built-in **sample-infile.csv** or upload your own CSV file.
-   * The app automatically matches your organisms against the curated list. If no read counts are provided, a default of 100 reads will be assumed.
-
-4. **Adjust Contamination Weights**
-   In the **Weights** subtab:
-   * Use sliders to adjust the importance of factors such as **biofilm formation**, **pathogenicity**, and **radiation resistance**.
-   * Click **“Restore Default Weights”** to revert changes.
-   * Optionally upload a **custom weights JSON file** to override all values.
-
-5. **Set Contamination Thresholds**
-   In the **Thresholds** subtab:
-   * **Score Threshold**: Organisms with a contamination score above this are flagged.
-   * **Reads Threshold**: Minimum read count required for an organism to be considered valid.
-
-6. **Run Analysis**
-   * Click **“Run Contamination Analysis”** to compute results.
-   * *Note: This manual run replaces the old “Recompute Automatically” toggle, ensuring consistent and reproducible results.*
-
-7. **Explore Your Results**
-   After running the analysis, switch to the other main tabs:
-   * **Summary Results**: Shows contamination metrics and the interactive Venn diagram.
-   * **Detailed Table**: Filtered fungi list with scores and status (available for CSV download).
-   * **BLAST Analysis**: Shows unmatched organisms and provides an interface to re-analyze them using the underlying BLAST pipeline.
-
----
-
-## 💡 Tips
-- **Formatting:** Ensure your input CSV file is correctly formatted for accurate matching. Typographical errors in species names will result in unmatched queries.
-- **Weight Adjustments:** Adjust weights thoughtfully to filter fungi based on the environmental pressures most relevant to your specific mission or sampling site.
-- **Thresholds:** Experiment with different threshold values to explore how varying stringencies affect your contamination risk profile.
-
-## 📞 Feedback and Support
-If you have any questions, encounter any issues, or have suggestions for improvement, please reach out via the credits section on the Streamlit app or open an Issue directly on our GitHub repository.
+- Concept: Ashish Mahabal (Caltech), Nitin K. Singh
+- Domain expertise: Swati Bijlani (COH), Nitin K. Singh
+- Original Streamlit app: Vannsh Jani (Caltech VURP '25)
+- Funded in part by TRISH (NASA-funded) via the Caltech Space-Health
+  Innovation Fund (CSIF).

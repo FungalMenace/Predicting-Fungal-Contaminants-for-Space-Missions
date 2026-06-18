@@ -34,7 +34,7 @@ To set up the pipeline locally:
 
 ```bash
 # 1. Clone the repository
-git clone [https://github.com/YourUsername/Fungi-Space-Contamination-Pipeline.git](https://github.com/YourUsername/Fungi-Space-Contamination-Pipeline.git)
+git clone https://github.com/VannshJani/Predicting-Fungal-Contaminants-for-Space-Missions.git
 cd Fungi-Space-Contamination-Pipeline
 
 # 2. Set up a virtual environment
@@ -62,8 +62,9 @@ Instructions for researchers who want to use this pipeline for their own data. L
 
 ### 3. [Streamlit Interactive Web App](docs/STREAMLIT_GUIDE.md)
 
-Information on how to access and use our interactive web application to search for specific species or upload your own `.fasta` files for dynamic scoring.
+Information on how to access and use our interactive web application to search for specific species or upload your own data for dynamic scoring.
 
+`link to github repository of application`: https://github.com/AshishMahabal/FungalContaminants
 ---
 
 ## 📝 Citation
