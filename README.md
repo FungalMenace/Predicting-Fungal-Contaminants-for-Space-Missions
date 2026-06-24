@@ -22,9 +22,8 @@ The pipeline performs end-to-end proteome analysis:
 
 ## 💾 Data Availability
 
-* **Metadata & Provenance:** The detailed source, database ID, and extraction date for all 1583 organisms evaluated in this study can be found in [`metadata/fasta_provenance.csv`](metadata/fasta_provenance.csv).
-* **FASTA Files:** The full set of 1583 fungal proteome FASTA files can be downloaded from the Caltech Library at: *[Placeholder: Insert Caltech DOI Link Here]*
-* **Primary Orthologs:** The top ortholog for each protein from each organism (including identity and coverage metrics) can be accessed at: *[Placeholder: Insert Caltech DOI Link Here]*
+* **Metadata & Provenance:** The detailed source, protein sequences for all 1583 organisms evaluated in this study can be found at: https://drive.google.com/file/d/1jnoaH64nAnvyMX1wH8IuR6OCc3z6Iyij/view?usp=share_link.
+* **FASTA Files:** The full set of 1583 fungal proteome FASTA files can be downloaded at: *[Placeholder: Insert Caltech DOI Link Here]*
 
 ---
 
