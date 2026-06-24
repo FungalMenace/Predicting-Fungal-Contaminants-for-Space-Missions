@@ -23,7 +23,7 @@ The pipeline performs end-to-end proteome analysis:
 ## 💾 Data Availability
 
 * **Metadata & Provenance:** The detailed source, protein sequences for all 1583 organisms evaluated in this study can be found at: https://drive.google.com/file/d/1jnoaH64nAnvyMX1wH8IuR6OCc3z6Iyij/view?usp=share_link.
-* **FASTA Files:** The full set of 1583 fungal proteome FASTA files can be downloaded at: *[Placeholder: Insert Caltech DOI Link Here]*
+* **FASTA Files:** The full set of 1583 fungal proteome FASTA files can be downloaded at: https://drive.google.com/file/d/10jYxRd_zEn0Un9JdEQmP9L_zIFwuP0sy/view?usp=share_link
 
 ---
 
