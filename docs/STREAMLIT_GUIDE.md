@@ -6,7 +6,7 @@ Welcome to the **Fungal Contamination Checker**. This Streamlit dashboard is des
 
 This application is built on top of the upstream [FungalContaminants](https://github.com/AshishMahabal/FungalContaminants) tool used at Caltech, TRISH, and the NASA-CSIF.
 
-`link to github repository of application`: https://github.com/AshishMahabal/FungalContaminants.\
+`link to github repository of application`: https://github.com/AshishMahabal/FungalContaminants.\\
 `link to the web application`: https://fungalorthocontaminants.streamlit.app
 
 ---
