@@ -61,6 +61,19 @@ This will generate a unified folder named `final_extracted_fastas/`.
 
 `Google drive link containing fasta files`: https://drive.google.com/file/d/10jYxRd_zEn0Un9JdEQmP9L_zIFwuP0sy/view?usp=share_link
 
+### 📝 Note on FASTA Retrieval and Database Mapping
+
+The structure of our retrieved FASTA files differs depending on the database source, which dictates how the organisms map to the files.
+
+* **Organism-Based Retrieval (1:1 Mapping):** For the majority of our sources (except OrthoDB), data was retrieved using **organism names**. This results in a straightforward 1:1 mapping where each organism has a single, dedicated `.fasta` file containing its complete proteome. 
+* **Protein-Based Retrieval (OrthoDB):** Conversely, data from OrthoDB was retrieved using our **25 query proteins**. Instead of one file per organism, OrthoDB generated 25 FASTA files (one for each query protein). Each of these query-specific files contains orthologous protein sequences from *multiple* organisms.
+
+**Example:**
+Consider the organism *Aaosphaeria arxii CBS 175.79*, which was sourced via OrthoDB. It does not have a single dedicated proteome file. Instead, its sequences are distributed across the query protein files based on what it possesses:
+* It shares 45% sequence identity with **CZF1**, so its orthologous protein sequence is located inside the `CZF1` OrthoDB FASTA file.
+* It shares 86.5% sequence identity with **HSP90**, so it also has a sequence in the `HSP90` OrthoDB FASTA file.
+* It lacks an **ERG11** ortholog (0% identity), so it has no corresponding sequence in the `ERG11` file.
+
 ---
 
 ## Step 2: BLASTp Automation and Initial Scoring
