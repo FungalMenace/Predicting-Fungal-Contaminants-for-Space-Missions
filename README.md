@@ -61,7 +61,7 @@ Instructions for researchers who want to use this pipeline for their own data. L
 
 ### 3. [Streamlit Interactive Web App](docs/STREAMLIT_GUIDE.md)
 
-Information on how to access and use our interactive web application to search for specific species or upload your own data for dynamic scoring. `link to github repository of application`: https://github.com/AshishMahabal/FungalContaminants
+Information on how to access and use our interactive web application to search for specific species or upload your own data for dynamic scoring.
 
 ---
 
