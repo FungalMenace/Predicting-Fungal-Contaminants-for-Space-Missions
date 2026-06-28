@@ -4,7 +4,10 @@
 
 Welcome to the **Fungal Contamination Checker**. This Streamlit dashboard is designed to flag likely fungal contaminants in sequencing or microbiome datasets. It evaluates observed species against a curated database of risk-relevant properties.
 
-This application is built on top of the upstream [FungalContaminants](https://github.com/AshishMahabal/FungalContaminants) tool used at Caltech, TRISH, and the NASA-CSIF. `link to github repository of application`: https://github.com/AshishMahabal/FungalContaminants. `link to the web application`: https://fungalorthocontaminants.streamlit.app
+This application is built on top of the upstream [FungalContaminants](https://github.com/AshishMahabal/FungalContaminants) tool used at Caltech, TRISH, and the NASA-CSIF.
+
+`link to github repository of application`: https://github.com/AshishMahabal/FungalContaminants.
+`link to the web application`: https://fungalorthocontaminants.streamlit.app
 
 ---
 
