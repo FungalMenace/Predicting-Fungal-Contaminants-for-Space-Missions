@@ -17,6 +17,7 @@ from src.fungi_pipeline.fastas.extract_fastas import (
     ExtractionConfig, BaseExtractor, dedupe_fasta_by_sequence
 )
 
+from src.fungi_pipeline.config import UNIPROT_TSV, MATRIX_XLSX, UNIPROT_FASTAS_DIR, UNIPARC_FASTAS_DIR
 
 # ---------- Step 1: Generate new_org_list ----------
 
@@ -274,32 +275,24 @@ def delete_empty_fastas(folder: Path) -> None:
 # ---------- Step 6: Main Pipeline ----------
 
 def main():
-    BASE_DIR = Path(__file__).resolve().parent
+    # Step 1: Build organism list using config paths
+    new_org_list = build_new_org_list(UNIPROT_TSV, MATRIX_XLSX)
 
-    uniprot_tsv = Path("/docs/files/proteomes_taxonomy_id_4751_2025_09_17.tsv")
-    matrix_xlsx = Path("/docs/files/organism_protein_matrix_combined_with_phyla.xlsx")
+    # Step 2: Fetch UniProt proteomes using config paths
+    df_uniprot, not_found = fetch_from_uniprot_custom(new_org_list, UNIPROT_FASTAS_DIR)
 
-    output_uniprot = BASE_DIR / "uniprot_fastas"
-    output_uniparc = BASE_DIR / "uniparc_fastas"
-
-    # Step 1: Build organism list
-    new_org_list = build_new_org_list(uniprot_tsv, matrix_xlsx)
-
-    # Step 2: Fetch UniProt proteomes
-    df_uniprot, not_found = fetch_from_uniprot_custom(new_org_list, output_uniprot)
-
-    # Step 3: Fetch missing ones from UniParc
-    cfg = ExtractionConfig(output_dir=output_uniparc)
+    # Step 3: Fetch missing ones from UniParc using config paths
+    cfg = ExtractionConfig(output_dir=UNIPARC_FASTAS_DIR)
     uniparc_fetcher = UniParcFetcher(cfg)
-    uniparc_fetcher.fetch(not_found, output_uniparc)
+    uniparc_fetcher.fetch(not_found, UNIPARC_FASTAS_DIR)
 
     # Step 4: Postprocess UniParc files
-    postprocess_uniparc(output_uniparc, not_found)
+    postprocess_uniparc(UNIPARC_FASTAS_DIR, not_found)
 
     # Step 5: Cleanup
     print("\n[INFO] Performing final cleanup ...")
-    delete_empty_fastas(output_uniprot)
-    delete_empty_fastas(output_uniparc)
+    delete_empty_fastas(UNIPROT_FASTAS_DIR)
+    delete_empty_fastas(UNIPARC_FASTAS_DIR)
 
     print("\n[ALL DONE] Default UniProt + UniParc FASTA extraction completed.")
 

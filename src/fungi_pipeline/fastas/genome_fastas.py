@@ -14,14 +14,7 @@ import gzip
 import pandas as pd
 import requests
 from xml.etree import ElementTree
-
-
-
-DATA_PATH = "/docs/files/gold_20250607_211424.csv"
-PROJECT_METADATA_CSV = "/docs/files/genome-projects.csv"
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-OUTPUT_DIR = os.path.join(BASE_DIR, "genome_fastas")
-MAPPINGS_JSON = os.path.join(BASE_DIR, "jgi_portal_mappings.json")
+from src.fungi_pipeline.config import DATA_PATH, PROJECT_METADATA_CSV, OUTPUT_DIR, MAPPINGS_JSON
 
 USERNAME = os.environ.get("JGI_USERNAME")
 PASSWORD = os.environ.get("JGI_PASSWORD")

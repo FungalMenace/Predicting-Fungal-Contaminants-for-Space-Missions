@@ -6,12 +6,13 @@ import warnings
 from pathlib import Path
 
 warnings.filterwarnings("ignore", category=UserWarning, module="Bio.Entrez")
+from src.fungi_pipeline.config import NCBI_INPUT_FILE, NCBI_TEMP_DIR, NCBI_FINAL_DIR
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-INPUT_FILE = "/docs/files/fastas_ncbi.txt"
-TEMP_DIR = os.path.join(BASE_DIR, "ncbi_temp")
-FINAL_DIR = os.path.join(BASE_DIR, "ncbi_fastas")
+INPUT_FILE = NCBI_INPUT_FILE
+TEMP_DIR = NCBI_TEMP_DIR
+FINAL_DIR = NCBI_FINAL_DIR
 
 # NCBI requires a valid email
 Entrez.email = os.environ.get("JGI_USERNAME", "your_email@example.com")

@@ -1,0 +1,26 @@
+# config.yml
+paths:
+  # JGI Pipeline Paths
+  gold_csv: "docs/files/gold_20250607_211424.csv"
+  metadata_csv: "docs/files/genome-projects.csv"
+  genome_fastas_out: "src/fungi_pipeline/fastas/genome_fastas"
+  jgi_mappings_json: "src/fungi_pipeline/fastas/jgi_portal_mappings.json"
+
+  # NCBI Pipeline Paths
+  ncbi_input_txt: "docs/files/fastas_ncbi.txt"
+  ncbi_temp_dir: "src/fungi_pipeline/fastas/ncbi_temp"
+  ncbi_final_dir: "src/fungi_pipeline/fastas/ncbi_fastas"
+
+  # UniProt Pipeline Paths
+  uniprot_tsv: "docs/files/proteomes_taxonomy_id_4751_2025_09_17.tsv"
+  matrix_xlsx: "docs/files/organism_protein_matrix_combined_with_phyla.xlsx"
+  uniprot_fastas_out: "src/fungi_pipeline/fastas/uniprot_fastas"
+  uniparc_fastas_out: "src/fungi_pipeline/fastas/uniparc_fastas"
+
+  # OrthoDB & BLAST Pipeline Paths
+  orthodb_base_dir: "src/fungi_pipeline/orthodb/orthodb_results"
+  orthodb_fastas_dir: "src/fungi_pipeline/orthodb/orthodb_results/fastas"
+  orthodb_csvs_dir: "src/fungi_pipeline/orthodb/orthodb_results/csvs"
+  orthodb_tsvs_dir: "src/fungi_pipeline/orthodb/orthodb_results/tsvs"
+  orthodb_blast_db: "src/fungi_pipeline/orthodb/orthodb_results/orthodb_db"
+  orthodb_excel_out: "src/fungi_pipeline/orthodb/orthodb_results/fungi_from_orthologs.xlsx"
