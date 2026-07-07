@@ -19,9 +19,9 @@ with open(ROOT_DIR / "config.yml", "r") as file:
 
 # --- JGI Pipeline Paths ---
 DATA_PATH = ROOT_DIR / _config['paths']['gold_csv']
-PROJECT_METADATA_CSV = ROOT_DIR / _config['paths']['genome-projects.csv']
+PROJECT_METADATA_CSV = ROOT_DIR / _config['paths']['metadata_csv']
 OUTPUT_DIR = ROOT_DIR / _config['paths']['genome_fastas_out']
-MAPPINGS_JSON = ROOT_DIR / _config['paths']['jgi_portal_mappings.json']
+MAPPINGS_JSON = ROOT_DIR / _config['paths']['jgi_mappings_json']
 
 # --- NCBI Pipeline Paths ---
 NCBI_INPUT_FILE = ROOT_DIR / _config['paths']['ncbi_input_txt']
