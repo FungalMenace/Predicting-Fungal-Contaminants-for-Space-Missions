@@ -13,6 +13,8 @@ biopython
 
 # HTTP and data retrieval
 requests
+beautifulsoup4
+lxml
 
 # File format conversions and document generation
 pypandoc
@@ -20,15 +22,10 @@ reportlab
 odfpy
 python-docx
 python-pptx
-openpyxl
 
 # Data visualization
 seaborn
 
-# Testing
+# Testing and progress monitoring
 pytest
-
 tqdm
-argparse
-
-beautifulsoup4
