@@ -9,7 +9,7 @@ warnings.filterwarnings("ignore", category=UserWarning, module="Bio.Entrez")
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-INPUT_FILE = "/Users/vannshjani/Downloads/FungalMenaceToo/other_files/fastas_ncbi.txt"
+INPUT_FILE = "/docs/txt/fastas_ncbi.txt"
 TEMP_DIR = os.path.join(BASE_DIR, "ncbi_temp")
 FINAL_DIR = os.path.join(BASE_DIR, "ncbi_fastas")
 
