@@ -50,3 +50,5 @@ PLOTS_EXPORT_DIR = ROOT_DIR / _config['paths']['plots_export_dir']
 PIPELINE_RESULTS_DIR = ROOT_DIR / _config['paths'].get('pipeline_results_dir', 'src/results')
 PIPELINE_QUERIES_DIR = ROOT_DIR / _config['paths'].get('pipeline_queries_dir', 'data/proteomes/queries')
 MERGED_SUMMARY_PATH = ROOT_DIR / _config['paths'].get('merged_summary_excel', 'src/results/merged_summary.xlsx')
+
+FINAL_EXTRACTED_FASTAS_DIR = ROOT_DIR / "src" / "fungi_pipeline" / "fastas" / "final_extracted_fastas"

@@ -1,3 +1,4 @@
+# src/fungi_pipeline/blast/runner.py
 """
 Usage:
     python runner.py \
@@ -18,6 +19,8 @@ from Bio import SeqIO
 import re
 import pandas as pd
 from io import StringIO
+
+from src.fungi_pipeline.config import ROOT_DIR, PIPELINE_RESULTS_DIR, PIPELINE_QUERIES_DIR, FINAL_EXTRACTED_FASTAS_DIR
 
 
 @dataclass 
@@ -74,7 +77,6 @@ class FungalBlastPipeline:
 
     # --- Run BLASTp (with matched subsequences) ---
     def run_blastp(self, query_fasta: Path, db_path: Path) -> str:
-        # Include matched sequence fragments (qseq and sseq)
         cmd = [
             "blastp",
             "-query", str(query_fasta),
@@ -106,6 +108,9 @@ class FungalBlastPipeline:
                 "evalue", "bitscore", "matched_query", "matched_subject"
             ],
         )
+
+        # --- BUG FIX: Explicitly enforce the identity threshold filter ---
+        df = df[df["pident"] >= self.identity_threshold].reset_index(drop=True)
 
         # --- Load query and subject sequences (complete) ---
         query_fasta_path = self.query_fasta_dir / f"{query_name}_query.fasta"
@@ -238,9 +243,9 @@ class FungalBlastPipeline:
 # --- Command line entry point ---
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run fungal BLAST pipeline")
-    parser.add_argument("--query_fasta_dir", required=True, help="Path to query FASTA directory")
-    parser.add_argument("--proteome_dir", required=True, help="Path to proteome FASTA directory")
-    parser.add_argument("--output_dir", required=True, help="Directory to save results")
+    parser.add_argument("--query_fasta_dir", default=str(PIPELINE_QUERIES_DIR), help="Path to query FASTA directory")
+    parser.add_argument("--proteome_dir", default=str(FINAL_EXTRACTED_FASTAS_DIR), help="Path to proteome FASTA directory")
+    parser.add_argument("--output_dir", default=str(PIPELINE_RESULTS_DIR), help="Directory to save results")
     parser.add_argument("--identity_threshold", type=float, default=35.0, help="Minimum percent identity")
     parser.add_argument("--threads", type=int, default=4, help="Number of threads for BLAST")
     parser.add_argument("--duplicates", action="store_true", help="Keep duplicate hits per query")
