@@ -18,7 +18,7 @@ BASE_DIR = os.path.join(SCRIPT_DIR, "orthodb_results")
 FASTAS_DIR = os.path.join(BASE_DIR, "fastas")
 CSVS_DIR = os.path.join(BASE_DIR, "csvs")
 TSVS_DIR = os.path.join(BASE_DIR, "tsvs")
-GOLD_CSV = "/Users/vannshjani/Downloads/FungalMenaceToo/docs/gold_20250607_211424.csv"
+GOLD_CSV = "/docs/files/gold_20250607_211424.csv"
 EXCEL_PATH = os.path.join(BASE_DIR, "fungi_from_orthologs.xlsx")
 
 for d in [BASE_DIR, FASTAS_DIR, CSVS_DIR, TSVS_DIR]:
