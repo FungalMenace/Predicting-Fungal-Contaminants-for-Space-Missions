@@ -1,0 +1,45 @@
+Scedosporium apiospermum
+Bipolaris zeicola
+Aspergillus fischeri
+Mortierella verticillata
+Aspergillus nidulans
+Talaromyces cellulolyticus
+Hebeloma circinans
+Emmonsia sp. CAC-2015a
+Aspergillus nomius
+Valsa mali
+Gymnopus luxurians
+Parastagonospora nodorum
+Anthracocystis flocculosa
+Fusarium verticillioides
+Kwoniella mangrovensis
+Acremonium chrysogenum
+Magnaporthe oryzae
+Annulohypoxylon stygium
+Thermothelomyces thermophila
+Mortierella elongata
+Mycosphaerella eumusae
+Talaromyces verruculosus
+Penicillium janthinellum
+Trametes cinnabarina
+Sporothrix insectorum
+Stagonospora sp. SRC1lsM3a
+Xanthophyllomyces dendrorhous
+Phialophora attae
+Torrubiella hemipterigena
+Phialophora americana
+Emericellopsis sp. 1a5
+Trichoderma reesei
+Moesziomyces antarcticus
+Ascochyta rabiei
+Nosema ceranae
+Phialocephala scopiformis
+[Nectria] haematococca
+Histoplasma capsulatum
+Nosema apis
+Bipolaris sorokiniana
+Peltigera membranacea
+Thielavia terrestris
+Chrysoporthe austroafricana
+Trichoderma virens
+Botrytis cinerea
