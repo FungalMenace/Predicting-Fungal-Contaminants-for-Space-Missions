@@ -17,8 +17,8 @@ from xml.etree import ElementTree
 
 
 
-DATA_PATH = "/docs/csvs/gold_20250607_211424.csv"
-PROJECT_METADATA_CSV = "/docs/csvs/genome-projects.csv"
+DATA_PATH = "/docs/files/gold_20250607_211424.csv"
+PROJECT_METADATA_CSV = "/docs/files/genome-projects.csv"
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 OUTPUT_DIR = os.path.join(BASE_DIR, "genome_fastas")
 MAPPINGS_JSON = os.path.join(BASE_DIR, "jgi_portal_mappings.json")
