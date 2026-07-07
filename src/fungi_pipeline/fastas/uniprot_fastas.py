@@ -273,7 +273,6 @@ def delete_empty_fastas(folder: Path) -> None:
 
 
 # ---------- Step 6: Main Pipeline ----------
-
 def main():
     # Step 1: Build organism list using config paths
     new_org_list = build_new_org_list(UNIPROT_TSV, MATRIX_XLSX)
