@@ -1,3 +1,4 @@
+# src/fungi_pipeline/utils.py
 import os
 import shutil
 import pandas as pd
@@ -8,22 +9,18 @@ import re
 from typing import List, Tuple
 from openpyxl.utils import get_column_letter
 import argparse
+from pathlib import Path
 
+from src.fungi_pipeline.config import ROOT_DIR, MERGED_SUMMARY_PATH
 
 
 def combine_fastas(folder_paths):
     """
     Combine FASTA files from multiple folders into a single directory.
-
-    Parameters:
-        folder_paths (list[str]): List of paths containing FASTA files.
-
-    Returns:
-        str: Path to the combined "final_extracted_fastas" directory.
     """
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    final_dir = os.path.join(base_dir, "final_extracted_fastas")
-    os.makedirs(final_dir, exist_ok=True)
+    # Establish dynamic absolute path relative to centralized root
+    final_dir = ROOT_DIR / "src" / "fungi_pipeline" / "fastas" / "final_extracted_fastas"
+    final_dir.mkdir(parents=True, exist_ok=True)
 
     total_copied = 0
     total_removed = 0
@@ -44,7 +41,7 @@ def combine_fastas(folder_paths):
                 continue
 
             new_name = f"{file}"
-            dest_path = os.path.join(final_dir, new_name)
+            dest_path = final_dir / new_name
 
             shutil.copy2(src_path, dest_path)
             total_copied += 1
@@ -54,22 +51,15 @@ def combine_fastas(folder_paths):
     print(f"0-byte files skipped: {total_removed}")
     print(f"Output directory: {final_dir}")
 
-    return final_dir
+    return str(final_dir)
 
 
-
-def merge_summary_excels(excel_paths: List[str], output_path: str = "merged_summary.xlsx") -> str:
+def merge_summary_excels(excel_paths: List[str], output_path: str = None) -> str:
     """
     Merge multiple 'BLAST Summary' Excel sheets into one formatted workbook.
-
-    Fixes:
-    - Proper category row (row 1)
-    - Clean headers (no Unnamed/.1)
-    - Recomputed colors + r,y,r+y
-    - Summary block not colored
-    - Skips blank/summary rows in color loop
-    - Freezes panes at C3
     """
+    if output_path is None:
+        output_path = str(MERGED_SUMMARY_PATH)
 
     # ---- Formatting ----
     RED_FILL = PatternFill("solid", fgColor="FF6347")
@@ -206,7 +196,6 @@ def merge_summary_excels(excel_paths: List[str], output_path: str = "merged_summ
     for i, (_, row) in enumerate(merged.iterrows(), start=start_row):
         org = str(row.get("Organism", "")).strip()
         if not org or "summary statistics" in org.lower():
-            # skip blank or accidental summary rows
             continue
 
         for j, col in enumerate(merged.columns, start=1):
@@ -278,13 +267,10 @@ def merge_summary_excels(excel_paths: List[str], output_path: str = "merged_summ
     return output_path
 
 
-
-
 if __name__ == "__main__":
-
     parser = argparse.ArgumentParser(description="Merge multiple 'BLAST Summary' Excel sheets or combine FASTA files.")
     parser.add_argument("--excels", nargs="+", help="List of Excel files to merge.", default=None)
-    parser.add_argument("--output", default="merged_summary.xlsx", help="Output Excel file path.")
+    parser.add_argument("--output", default=None, help="Output Excel file path.")
     parser.add_argument("--fastas", nargs="+", help="List of folders containing FASTA files to combine.", default=None)
     args = parser.parse_args()
 
@@ -294,6 +280,3 @@ if __name__ == "__main__":
         combine_fastas(args.fastas)
     else:
         print("Please provide either --excels or --fastas arguments.")
-
-
-

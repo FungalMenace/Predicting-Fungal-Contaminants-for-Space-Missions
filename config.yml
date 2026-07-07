@@ -24,3 +24,11 @@ paths:
   orthodb_tsvs_dir: "src/fungi_pipeline/orthodb/orthodb_results/tsvs"
   orthodb_blast_db: "src/fungi_pipeline/orthodb/orthodb_results/orthodb_db"
   orthodb_excel_out: "src/fungi_pipeline/orthodb/orthodb_results/fungi_from_orthologs.xlsx"
+
+  # Plotting & Reporting Pipeline Paths
+  summary_excel: "src/fungi_pipeline/excel/fungal_summary.xlsx"
+  plots_export_dir: "src/fungi_pipeline/plots/plots"
+
+  pipeline_results_dir: "src/results"
+  pipeline_queries_dir: "data/proteomes/queries"
+  merged_summary_excel: "src/results/merged_summary.xlsx"

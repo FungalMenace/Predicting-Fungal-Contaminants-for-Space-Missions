@@ -1,16 +1,13 @@
+# src/fungi_pipeline/pipeline.py
 """
 Unified pipeline for fungal proteome analysis.
-
-Modules integrated:
-  1. FASTA Extraction (extract_fastas.py)
-  2. BLAST Execution (blast.runner)
-  3. Excel Summary Creation (make_excel.py)
-  4. Plot Generation (plot_summary.py)
 """
 
 import argparse
 import os
 from pathlib import Path
+import pandas as pd
+
 from src.fungi_pipeline.fastas.extract_fastas import ExtractionConfig, UniProtFetcher
 from src.fungi_pipeline.blast.runner import FungalBlastPipeline
 from src.fungi_pipeline.excel.make_excel import read_blast_results, generate_excel
@@ -23,16 +20,19 @@ from src.fungi_pipeline.plots.plots import (
     plot_category_counts,
     PROTEIN_CATEGORY,
 )
-import pandas as pd
+
+from src.fungi_pipeline.config import ROOT_DIR, PIPELINE_RESULTS_DIR, PIPELINE_QUERIES_DIR, SUMMARY_EXCEL_PATH
 
 
 class PipelineManager:
     def __init__(self, args):
         self.args = args
-        self.base_dir = Path(args.base_dir)
-        self.results_dir = self.base_dir / "src" / "results"
+        self.base_dir = Path(args.base_dir) if args.base_dir else ROOT_DIR
+        
+        # Route directory configurations dynamically through the central architecture layout
+        self.results_dir = PIPELINE_RESULTS_DIR
         self.fastas_dir = self.base_dir / "src" / "fastas" / f"{args.proteomes_dir}"
-        self.excel_file = Path(args.excel or (self.results_dir / "fungal_summary.xlsx"))
+        self.excel_file = Path(args.excel or SUMMARY_EXCEL_PATH)
         self.proteomes_dir = self.base_dir / "proteomes"
 
         self.results_dir.mkdir(exist_ok=True, parents=True)
@@ -54,7 +54,7 @@ class PipelineManager:
 
     def run_blast(self):
         print("\n[Step 2] Running BLAST pipeline...")
-        query_dir = self.base_dir / "data" / "proteomes" / "queries"
+        query_dir = PIPELINE_QUERIES_DIR
         output_dir = self.results_dir
         pipeline = FungalBlastPipeline(
             query_fasta_dir=query_dir,
@@ -90,7 +90,7 @@ class PipelineManager:
 
 def main():
     parser = argparse.ArgumentParser(description="Full modular fungal analysis pipeline.")
-    parser.add_argument("--base_dir", default=f"{os.getcwd()}", help="Base directory for inputs/outputs.")
+    parser.add_argument("--base_dir", default=str(ROOT_DIR), help="Base directory for inputs/outputs.")
     parser.add_argument("--orgs", default="sample_data.txt", help="File with list of organisms to process.")
     parser.add_argument("--excel", default=None, help="Existing Excel file to use (if skipping earlier steps).")
     parser.add_argument("--steps", default="1,4", help="Comma-separated range of steps to run, e.g. 1,3 or 2,4.")
@@ -98,7 +98,6 @@ def main():
 
     args = parser.parse_args()
 
-    # Parse steps argument into integers
     try:
         start, end = map(int, args.steps.split(","))
     except ValueError:

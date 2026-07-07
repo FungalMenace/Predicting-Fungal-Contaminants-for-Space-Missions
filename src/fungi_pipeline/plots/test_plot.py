@@ -1,13 +1,6 @@
 """
 Test script for generating visual plots from the Excel summary
 created by `make_summary_excel.py`.
-
-Usage examples:
-    python test_plot_summary.py --input_excel fungal_summary.xlsx --plot all
-    python test_plot_summary.py --input_excel fungal_summary.xlsx --plot AMR
-    python test_plot_summary.py --input_excel fungal_summary.xlsx --plot a_score
-    python test_plot_summary.py --input_excel fungal_summary.xlsx --plot s_score
-    python test_plot_summary.py --input_excel fungal_summary.xlsx --plot category_counts
 """
 
 import argparse
@@ -21,10 +14,13 @@ from src.fungi_pipeline.plots.plots import (
     plot_category_counts,
 )
 
+from src.fungi_pipeline.config import SUMMARY_EXCEL_PATH
+
 
 def main():
     parser = argparse.ArgumentParser(description="Generate visual plots from BLAST Excel summary.")
-    parser.add_argument("--input_excel", default="src/fungi_pipeline/excel/fungal_summary.xlsx", help="Path to Excel file")
+    # Expose the central configuration file path cleanly stringified for argument validation
+    parser.add_argument("--input_excel", default=str(SUMMARY_EXCEL_PATH), help="Path to Excel file")
     parser.add_argument("--plot", default="all",
                         help="Plot type: AMR | a_score | s_score | category_counts | all")
     args = parser.parse_args()
@@ -34,7 +30,7 @@ def main():
     df = flatten_multilevel_columns(df)
     df.rename(columns={df.columns[0]: 'Organism', df.columns[1]: 'A-score'}, inplace=True)
 
-    # Determine which plot(s) to generate
+    # Determine which plot(s) to generate (plots.py defaults handle PLOTS_EXPORT_DIR)
     if args.plot.lower() == "all":
         for cat in PROTEIN_CATEGORY.keys():
             plot_category(df, cat)

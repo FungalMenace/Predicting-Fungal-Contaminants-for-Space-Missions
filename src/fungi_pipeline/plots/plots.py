@@ -6,11 +6,6 @@ Includes:
   2. A-score histogram + yellow/red fractions
   3. S-score histograms
   4. Organisms-per-category plot
-
-Usage examples:
-    python plot_summary.py --input_excel fungal_summary.xlsx --plot all
-    python plot_summary.py --input_excel fungal_summary.xlsx --plot AMR
-    python plot_summary.py --input_excel fungal_summary.xlsx --plot a_score
 """
 
 import os
@@ -22,10 +17,11 @@ from pathlib import Path
 import sys
 from src.fungi_pipeline.excel.make_excel import PROTEIN_CATEGORY
 
+from src.fungi_pipeline.config import PLOTS_EXPORT_DIR
 
 
 def ensure_plots_dir(save_path):
-    os.makedirs(save_path, exist_ok=True)
+    Path(save_path).mkdir(parents=True, exist_ok=True)
 
 
 def flatten_multilevel_columns(df):
@@ -54,8 +50,9 @@ def cell_color(val):
         return 'blue'
 
 
-def plot_category(df, category, threshold_high=75, threshold_low=35,save_path="src/fungi_pipeline/plots/plots"):
+def plot_category(df, category, threshold_high=75, threshold_low=35, save_path=PLOTS_EXPORT_DIR):
     """Bar plot showing how many organisms exceed thresholds per protein."""
+    save_path = Path(save_path)
     ensure_plots_dir(save_path)
 
     if category not in PROTEIN_CATEGORY:
@@ -68,12 +65,9 @@ def plot_category(df, category, threshold_high=75, threshold_low=35,save_path="s
     protein_columns = df.columns[2:-2]
     cols_to_keep = ["Organism"]
     for col in protein_columns:
-        # print(col)
         abbr = col.split("-")[0]
         if abbr in proteins_category:
             cols_to_keep.append(col)
-
-
 
     if len(cols_to_keep) <= 1:
         print(f"No matching protein columns found for category '{category}'. Skipping plot.")
@@ -107,7 +101,6 @@ def plot_category(df, category, threshold_high=75, threshold_low=35,save_path="s
                        label='35 ≤ I < 75', color='orange')
     bars_high = plt.bar([i + bar_width/2 for i in x], high_counts, width=bar_width,
                         label='I ≥ 75', color='red')
-    
 
     plt.xticks(x, proteins, fontsize=13, rotation=45, ha='right')
     plt.yticks(fontsize=13)
@@ -131,14 +124,14 @@ def plot_category(df, category, threshold_high=75, threshold_low=35,save_path="s
             plt.text(bar.get_x() + bar.get_width() / 2, height, str(int(height)),
                      ha='center', va='bottom', fontsize=11)
 
-    out_file = f"{save_path}/{category}_barplot.png"
+    out_file = save_path / f"{category}_barplot.png"
     plt.savefig(out_file, dpi=300, bbox_inches='tight')
     print(f"Saved {out_file}")
     plt.close()
 
 
-
-def plot_a_scores(df,save_path="src/fungi_pipeline/plots/plots"):
+def plot_a_scores(df, save_path=PLOTS_EXPORT_DIR):
+    save_path = Path(save_path)
     ensure_plots_dir(save_path)
     print("Generating A-score and red/yellow fraction plots...")
 
@@ -158,7 +151,7 @@ def plot_a_scores(df,save_path="src/fungi_pipeline/plots/plots"):
     plt.yticks(fontsize=16)
     plt.grid(True, axis='y')
     plt.tight_layout()
-    plt.savefig(f"{save_path}/A-score.png", dpi=300)
+    plt.savefig(save_path / "A-score.png", dpi=300)
     plt.close()
 
     # --- Red/yellow fraction per category ---
@@ -196,7 +189,7 @@ def plot_a_scores(df,save_path="src/fungi_pipeline/plots/plots"):
     plt.title('Percentage of Red Rows with ≥1 Red Protein in Category')
     plt.xticks(rotation=45, ha='right')
     plt.tight_layout()
-    plt.savefig(f"{save_path}/Red_rows_category_fraction.png", dpi=300)
+    plt.savefig(save_path / "Red_rows_category_fraction.png", dpi=300)
     plt.close()
 
     plt.figure(figsize=(12, 6))
@@ -205,12 +198,12 @@ def plot_a_scores(df,save_path="src/fungi_pipeline/plots/plots"):
     plt.title('Percentage of Yellow Rows with ≥1 Yellow Protein in Category')
     plt.xticks(rotation=45, ha='right')
     plt.tight_layout()
-    plt.savefig(f"{save_path}/Yellow_rows_category_fraction.png", dpi=300)
+    plt.savefig(save_path / "Yellow_rows_category_fraction.png", dpi=300)
     plt.close()
 
 
-
-def plot_s_scores(df,save_path="src/fungi_pipeline/plots/plots"):
+def plot_s_scores(df, save_path=PLOTS_EXPORT_DIR):
+    save_path = Path(save_path)
     ensure_plots_dir(save_path)
     print("Generating S-score histograms...")
 
@@ -229,7 +222,6 @@ def plot_s_scores(df,save_path="src/fungi_pipeline/plots/plots"):
 
     s_scores_35, s_scores_75 = [], []
     for _, row in df.iterrows():
-        # threshold ≥35
         s35 = 0
         s75 = 0
         for cat in set(protein_category.values()):
@@ -248,7 +240,7 @@ def plot_s_scores(df,save_path="src/fungi_pipeline/plots/plots"):
     plt.ylabel("Number of Organisms", fontsize=18)
     plt.grid(axis='y', alpha=0.7)
     plt.tight_layout()
-    plt.savefig(f"{save_path}/s-35.png", dpi=300)
+    plt.savefig(save_path / "s-35.png", dpi=300)
     plt.close()
 
     plt.figure(figsize=(10, 6))
@@ -257,12 +249,12 @@ def plot_s_scores(df,save_path="src/fungi_pipeline/plots/plots"):
     plt.ylabel("Number of Organisms", fontsize=18)
     plt.grid(axis='y', alpha=0.7)
     plt.tight_layout()
-    plt.savefig(f"{save_path}/s-75.png", dpi=300)
+    plt.savefig(save_path / "s-75.png", dpi=300)
     plt.close()
 
 
-
-def plot_category_counts(df,save_path="src/fungi_pipeline/plots/plots"):
+def plot_category_counts(df, save_path=PLOTS_EXPORT_DIR):
+    save_path = Path(save_path)
     ensure_plots_dir(save_path)
     print("Generating combined orange/red organism count plot...")
 
@@ -292,8 +284,6 @@ def plot_category_counts(df,save_path="src/fungi_pipeline/plots/plots"):
         red_counts[cat] = subset_red.apply(lambda r: any(c == 'red' for c in r), axis=1).sum()
         orange_counts[cat] = subset_orange.apply(lambda r: any(c == 'yellow' for c in r), axis=1).sum()
 
-    
-
     x = range(len(categories))
     width = 0.4
     bars_orange = plt.bar([i - width/2 for i in x], [orange_counts[c] for c in categories],
@@ -312,7 +302,5 @@ def plot_category_counts(df,save_path="src/fungi_pipeline/plots/plots"):
         plt.text(bar.get_x() + bar.get_width()/2, height, str(int(height)),
                  ha='center', va='bottom', fontsize=11)
 
-    plt.savefig(f"{save_path}/category_counts_combined.png", dpi=300, bbox_inches='tight')
+    plt.savefig(save_path / "category_counts_combined.png", dpi=300, bbox_inches='tight')
     plt.close()
-
-
