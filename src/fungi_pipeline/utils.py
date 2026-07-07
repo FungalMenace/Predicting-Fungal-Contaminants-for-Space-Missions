@@ -295,7 +295,5 @@ if __name__ == "__main__":
     else:
         print("Please provide either --excels or --fastas arguments.")
 
-    # combined_dir = combine_fastas(["/Users/vannshjani/Downloads/FungalMenaceToo/src/fungi_pipeline/fastas/ncbi_fastas", "/Users/vannshjani/Downloads/FungalMenaceToo/src/fungi_pipeline/fastas/uniparc_fastas","/Users/vannshjani/Downloads/FungalMenaceToo/src/fungi_pipeline/fastas/uniprot_fastas"])
-    # merged_excel = merge_summary_excels(["/Users/vannshjani/Downloads/FungalMenaceToo/src/fungi_pipeline/orthodb/orthodb_results/organism_protein_table_combined.xlsx", "/Users/vannshjani/Downloads/FungalMenaceToo/fungal_summary.xlsx"], "final_summary.xlsx")
 
 
