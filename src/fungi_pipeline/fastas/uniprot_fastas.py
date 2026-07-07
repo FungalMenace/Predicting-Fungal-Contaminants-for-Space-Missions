@@ -277,7 +277,7 @@ def main():
     BASE_DIR = Path(__file__).resolve().parent
 
     uniprot_tsv = Path("/docs/files/proteomes_taxonomy_id_4751_2025_09_17.tsv")
-    matrix_xlsx = Path("/docs/files/organism_protein_matrix_combined_with_phyla.xlsx")
+    matrix_xlsx = Path("/docs/files/organism_protein_table.xlsx")
 
     output_uniprot = BASE_DIR / "uniprot_fastas"
     output_uniparc = BASE_DIR / "uniparc_fastas"
