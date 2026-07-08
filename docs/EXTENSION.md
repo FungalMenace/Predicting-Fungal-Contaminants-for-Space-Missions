@@ -10,7 +10,7 @@ To analyze a new set of fungi, you just need their `.fasta` proteome files.
 2. **Create a target directory:** Place all your custom FASTA files into a single directory. For example: `custom_fastas/`
 3. **Run the pipeline:** Run the master pipeline script, pointing it to your custom directory using the `--proteomes_dir` argument.
    ```bash
-   python -m src.fungi_pipeline.pipeline --steps 2,4 --proteomes_dir custom_fastas
+   python -m src.fungi_pipeline.pipeline --steps 2,4 --proteomes_dir /path/to/custom_fastas
 
     ```
 
