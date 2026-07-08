@@ -5,7 +5,7 @@
 
 > **Official repository for the paper:** *"Predicting Fungal Contaminants for Space Missions Using Proteome-Wide Screening for Protein Orthologs"* by Ashish Mahabal, Vannsh Jani, S. George Djorgovski, Nitin K. Singh, and Swati Bijlani.
 
-![Data Flow Sankey Diagram](images/sankey.png)
+![Data Flow Sankey Diagram](images/sankey_new_plot.png)
 
 ## Overview
 
