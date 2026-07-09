@@ -1,19 +1,3 @@
-"""
-Notebook-faithful plotting for the fungi pipeline.
-
-Drop the functions below into your existing `plots.py`. They reproduce EVERY
-figure saved by testing_copy.ipynb, splitting them into two sub-folders:
-
-    <plots>/color
-    <plots>/black and white
-
-Your existing `plots.py` already defines `cell_color`, `ensure_plots_dir`,
-and imports `PROTEIN_CATEGORY`. Those are reused here (do NOT redefine them);
-only the `CATEGORY_ABBR`, `build_protein_category`, `_abbr_labels`,
-`prepare_plot_data`, `compute_s_scores`, `_combined_counts`, the `plot_*`
-functions, and the new `generate_existing_excel_plots` body are new.
-"""
-
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -25,13 +9,7 @@ from src.fungi_pipeline.config import PLOTS_EXPORT_DIR
 # NOTE: `cell_color` and `ensure_plots_dir` come from your existing plots.py.
 
 
-# Category name -> short label used on the combined plots (cells 17-20).
-# The notebook hard-codes ["AMR","BF","HP","RAD","SF","TH"] assuming a fixed
-# sort order; this mapping keeps labels aligned to whatever order the
-# categories actually appear in. Covers both the short keys used in this
-# workbook / make_excel AND the notebook's long-form keys, so it works
-# regardless of how PROTEIN_CATEGORY names its categories. Anything missing
-# falls back to the full category name (never silently mislabelled).
+
 CATEGORY_ABBR = {
     # short-form keys (as they appear in the Excel group-header row / make_excel)
     "AMR": "AMR",
@@ -65,9 +43,6 @@ def cell_color(val):
     else:
         return 'blue'
 
-# --------------------------------------------------------------------------- #
-# shared helpers
-# --------------------------------------------------------------------------- #
 def build_protein_category(protein_cols):
     """Map each protein column -> its category using PROTEIN_CATEGORY."""
     protein_category = {}
@@ -133,9 +108,7 @@ def _combined_counts(colors_df, protein_category, red_rows, yellow_rows, categor
     return red_counts, yellow_counts
 
 
-# --------------------------------------------------------------------------- #
-# COLOR plots
-# --------------------------------------------------------------------------- #
+
 def plot_a_score_color(df, save_path):                       # cell 2 (colour variant)
     ensure_plots_dir(save_path)  # noqa: F821
     plt.figure(figsize=(10, 6))
@@ -268,9 +241,7 @@ def plot_combined_counts_color_log(red_counts, yellow_counts, categories, save_p
     plt.close()
 
 
-# --------------------------------------------------------------------------- #
-# BLACK & WHITE plots
-# --------------------------------------------------------------------------- #
+
 def plot_a_score_bw(df, save_path):                          # cell 2
     ensure_plots_dir(save_path)  # noqa: F821
     plt.figure(figsize=(10, 6))
@@ -376,9 +347,7 @@ def plot_combined_counts_bw(red_counts, yellow_counts, categories, save_path):  
     plt.close()
 
 
-# =========================================================================== #
-# Rewritten pipeline method — paste this into your pipeline class.
-# =========================================================================== #
+
 def generate_existing_excel_plots(self):
     print("\n[Step 4] Generating plots from existing Excel summary...")
 

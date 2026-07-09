@@ -30,16 +30,24 @@ from src.fungi_pipeline.excel.phyla import get_phylum
 
 FEATURES = [
     "AMR",
-    "Bio",
-    "Hpat",
-    "TH",
-    "RAD",
-    "SF",
+    "Biofilm",
+    "H-pat",
+    "Thermophile",
+    "Rad-res",
+    "Spore",
 ]
 
 PROTEIN_CATEGORY = {
-    "AMR": ["ERG11", "CDR1", "MDR1", "UPC2", "TAC1", "MRR1"],
-    "Bio": [
+    "AMR": [
+        "ERG11",
+        "CDR1",
+        "MDR1",
+        "UPC2",
+        "TAC1",
+        "MRR1",
+    ],
+
+    "Biofilm": [
         "BCR1",
         "EFG1",
         "TEC1",
@@ -50,12 +58,62 @@ PROTEIN_CATEGORY = {
         "CZF1",
         "FLO8",
     ],
-    "Hpat": ["SAP5", "PLB1", "LAC1", "RIM101"],
-    "TH": ["HSP90"],
-    "RAD": ["RAD51"],
-    "SF": ["brlA", "abaA", "wetA", "srr1"],
+
+    "H-pat": [
+        "SAP5",
+        "PLB1",
+        "LAC1",
+        "RIM101",
+    ],
+
+    "Thermophile": [
+        "HSP90",
+    ],
+
+    "Rad-res": [
+        "RAD51",
+    ],
+
+    "Spore": [
+        "brlA",
+        "abaA",
+        "wetA",
+        "srr1",
+    ],
 }
 
+HEADER_INFO = [
+    ("AMR", "ERG11", "Candida", "Albicans"),
+    ("AMR", "CDR1", "Candida", "Albicans"),
+    ("AMR", "MDR1", "Candida", "Albicans"),
+    ("AMR", "UPC2", "Candida", "Albicans"),
+    ("AMR", "TAC1", "Candida", "Albicans"),
+    ("AMR", "MRR1", "Candida", "Albicans"),
+
+    ("Biofilm", "BCR1", "Candida", "Albicans"),
+    ("Biofilm", "EFG1", "Candida", "Albicans"),
+    ("Biofilm", "TEC1", "Candida", "Albicans"),
+    ("Biofilm", "HWP1", "Candida", "Albicans"),
+    ("Biofilm", "ALS3", "Candida", "Albicans"),
+    ("Biofilm", "NDT80", "Candida", "Albicans"),
+    ("Biofilm", "ERG251", "Candida", "Albicans"),
+    ("Biofilm", "CZF1", "Candida", "Albicans"),
+    ("Biofilm", "FLO8", "Candida", "Albicans"),
+
+    ("H-pat", "SAP5", "Candida", "Albicans"),
+    ("H-pat", "PLB1", "Cryptococcus", "Neoformans"),
+    ("H-pat", "LAC1", "Cryptococcus", "Neoformans"),
+    ("H-pat", "RIM101", "Candida", "Albicans"),
+
+    ("Thermophile", "HSP90", "Aspergillus", "Fumigatus"),
+
+    ("Rad-res", "RAD51", "Saccharomyces", "Cerevisiae"),
+
+    ("Spore", "brlA", "Emericella", "Nidulans"),
+    ("Spore", "abaA", "Emericella", "Nidulans"),
+    ("Spore", "wetA", "Emericella", "Nidulans"),
+    ("Spore", "srr1", "Coprinopsis", "Cinerea"),
+]
 
 
 RED_FILL = PatternFill("solid", fgColor="FF6347")     # >75
@@ -96,26 +154,26 @@ def read_blast_results(folder):
 
 
 
-def build_category_mapping(all_proteins):
-    prot_to_cat = {}
-    for cat, prots in PROTEIN_CATEGORY.items():
-        for p_abbr in prots:
-            for prot in all_proteins:
-                if p_abbr.lower() in prot.lower():
-                    prot_to_cat[prot] = cat
-                    break
+def load_source_mapping(source_file):
+    if source_file is None or not os.path.exists(source_file):
+        return {}
 
-    for prot in all_proteins:
-        if prot not in prot_to_cat:
-            prot_to_cat[prot] = "Uncategorized"
+    mapping = {}
 
-    grouped = []
-    for cat in FEATURES + ["Uncategorized"]:
-        grouped.extend([p for p, c in prot_to_cat.items() if c == cat])
-    ordered = [p for p in grouped if p in all_proteins]
-    return prot_to_cat, ordered
+    with open(source_file) as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
 
+            if "\t" in line:
+                org, src = line.split("\t", 1)
+            else:
+                org, src = line.split(",", 1)
 
+            mapping[org.strip()] = src.strip()
+
+    return mapping
 
 def load_phylum_cache(cache_path="phylum_cache.json"):
     if os.path.exists(cache_path):
@@ -136,39 +194,48 @@ def save_phylum_cache(cache, cache_path="phylum_cache.json"):
 
 
 
-def generate_excel(data, organisms, all_proteins, output_path, cache_path="phylum_cache.json"):
-    prot_to_cat, ordered_proteins = build_category_mapping(all_proteins)
+def generate_excel(
+    data,
+    organisms,
+    all_proteins,
+    output_path,
+    source_file=None,
+    cache_path="phylum_cache.json",
+):
+    source_map = load_source_mapping(source_file)
+    # Map expected protein names to the actual BLAST protein names
+    protein_lookup = {}
+
+    for _, blast_protein in data.keys():
+        blast_upper = blast_protein.upper()
+
+        for _, expected, _, _ in HEADER_INFO:
+            if blast_upper.startswith(expected.upper() + "-"):
+                protein_lookup[expected] = blast_protein
     wb = Workbook()
     ws = wb.active
     ws.title = "BLAST Summary"
 
-    # Category headers
-    ws.cell(row=1, column=1, value="")
-    ws.cell(row=1, column=2, value="")
-    col = 3
-    cat_to_prots = {cat: [p for p, c in prot_to_cat.items() if c == cat]
-                    for cat in FEATURES + ["Uncategorized"]}
-    for cat in FEATURES + ["Uncategorized"]:
-        for _ in cat_to_prots[cat]:
-            cell = ws.cell(row=1, column=col, value=cat)
-            cell.font = Font(bold=True)
-            cell.alignment = Alignment(horizontal="center")
-            col += 1
-
-    # Header row
     ws.cell(row=2, column=1, value="Organism").font = Font(bold=True)
     ws.cell(row=2, column=2, value="A-score").font = Font(bold=True)
-    for j, prot in enumerate(ordered_proteins, start=3):
-        cell = ws.cell(row=2, column=j, value=prot)
-        cell.font = Font(bold=True)
-        cell.alignment = Alignment(horizontal="center")
 
-    summary_col = len(ordered_proteins) + 3
+    for col, (cat, prot, genus, species) in enumerate(HEADER_INFO, start=3):
+        ws.cell(row=1, column=col, value=cat)
+        ws.cell(row=2, column=col, value=prot)
+        ws.cell(row=3, column=col, value=genus)
+        ws.cell(row=4, column=col, value=species)
+
+        for r in range(1, 5):
+            ws.cell(row=r, column=col).font = Font(bold=True)
+            ws.cell(row=r, column=col).alignment = Alignment(horizontal="center")
+
+    summary_col = len(HEADER_INFO) + 3
+    source_col = summary_col + 1
+    phylum_col = summary_col + 2
+
     ws.cell(row=2, column=summary_col, value="r,y,r+y").font = Font(bold=True)
-
-    # 🧬 Add Phylum column
-    phylum_col = summary_col + 1
-    ws.cell(row=2, column=phylum_col, value="Phylum").font = Font(bold=True)
+    ws.cell(row=2, column=source_col, value="Source").font = Font(bold=True)
+    ws.cell(row=2, column=phylum_col, value="Phyla").font = Font(bold=True)
 
     # Load cache
     phylum_cache = load_phylum_cache(cache_path)
@@ -177,8 +244,7 @@ def generate_excel(data, organisms, all_proteins, output_path, cache_path="phylu
     yellow_rows = 0
     blue_rows = 0
 
-
-    for i, org in enumerate(organisms, start=3):
+    for i, org in enumerate(organisms, start=5):
         ws.cell(row=i, column=1, value=org)
 
         cat_red = {cat: 0 for cat in FEATURES}
@@ -186,14 +252,17 @@ def generate_excel(data, organisms, all_proteins, output_path, cache_path="phylu
         row_red = 0
         row_yellow = 0
 
-        for j, prot in enumerate(ordered_proteins, start=3):
-            val = data.get((org, prot))
-            if val is None:
-                continue
+        for j, (_, prot, _, _) in enumerate(HEADER_INFO, start=3):
+            real_protein = protein_lookup.get(prot)
+
+            if real_protein is None:
+                val = 0.0
+            else:
+                val = data.get((org, real_protein), 0.0)
             c = ws.cell(row=i, column=j, value=round(val, 1))
             c.alignment = Alignment(horizontal="center")
 
-            cat = prot_to_cat.get(prot, "Uncategorized")
+            cat = next(c for c, p, _, _ in HEADER_INFO if p == prot)
             if cat in FEATURES:
                 if val > 75:
                     cat_red[cat] += 1
@@ -228,6 +297,9 @@ def generate_excel(data, organisms, all_proteins, output_path, cache_path="phylu
 
         ws.cell(row=i, column=summary_col, value=f"{row_red},{row_yellow},{row_red + row_yellow}")
 
+        ws.cell(row=i, column=source_col,
+        value=source_map.get(org, ""))
+
         # --- Identify Phylum ---
         org_clean = org.strip()
         if org_clean in phylum_cache:
@@ -243,7 +315,7 @@ def generate_excel(data, organisms, all_proteins, output_path, cache_path="phylu
     ws.column_dimensions[get_column_letter(2)].width = 12
     for j in range(3, phylum_col + 1):
         ws.column_dimensions[get_column_letter(j)].width = 16
-    ws.freeze_panes = "C3"
+    ws.freeze_panes = "C5"
 
 
     total_rows = len(organisms)
@@ -286,7 +358,13 @@ def main():
     args = parser.parse_args()
 
     data, organisms, prots = read_blast_results(args.i)
-    generate_excel(data, organisms, prots, args.o)
+    generate_excel(
+        data,
+        organisms,
+        prots,
+        args.o,
+        source_file=None, 
+    )
 
 
 if __name__ == "__main__":

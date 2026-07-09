@@ -83,30 +83,33 @@ class PipelineManager:
         generate_excel(data, organisms, prots, self.excel_file)
         print(f"Excel summary created at: {self.excel_file}")
 
+
     def generate_plots(self):
-        print("\n[Step 4] Generating plots from Excel summary...")
-        df = pd.read_excel(self.excel_file)
-        df.columns = df.iloc[0]
-        df = df.iloc[1:-11]
-        df.rename(columns={df.columns[0]: "Organism", df.columns[1]: "A-score"}, inplace=True)
-
-        for cat in PROTEIN_CATEGORY.keys():
-            plot_category(df, cat)
-        plot_a_scores(df)
-        plot_s_scores(df)
-        plot_category_counts(df)
-        print("All plots generated and saved to the /plots folder.\n")
-
-    def generate_existing_excel_plots(self):
         print("\n[Step 4] Generating plots from existing Excel summary...")
 
-        # --- load exactly as before ---
-        df = pd.read_excel(self.excel_file)
-        df.columns = df.iloc[0]
-        df.drop([1, 2], inplace=True)
-        df = df.iloc[1:-10]
-        df.rename(columns={df.columns[0]: "Organism", df.columns[1]: "A-score"},
-                inplace=True)
+        # Read Excel using row 2 as the column names
+        df = pd.read_excel(self.excel_file, header=1)
+
+        # Remove the two metadata rows (Genus and Species)
+        df = df.iloc[2:].copy()
+
+        # Find where "Summary Statistics" begins
+        summary_idx = df[df.iloc[:, 0] == "Summary Statistics"].index
+
+        if len(summary_idx) > 0:
+            df = df.loc[:summary_idx[0] - 1]
+
+        # Rename first two columns
+        df.rename(
+            columns={
+                df.columns[0]: "Organism",
+                df.columns[1]: "A-score",
+            },
+            inplace=True,
+        )
+
+        df.reset_index(drop=True, inplace=True)
+        df["A-score"] = pd.to_numeric(df["A-score"], errors="coerce")
 
         # --- output sub-folders ---
         plots_root = Path(PLOTS_EXPORT_DIR)
@@ -118,6 +121,9 @@ class PipelineManager:
         # --- compute shared structures once ---
         protein_cols, colors_df, protein_category, red_rows, yellow_rows = \
             prepare_plot_data(df)
+        print(df.shape)
+        print(df.columns.tolist())
+        print(protein_cols)
         s35, s75 = compute_s_scores(df, colors_df, protein_category)
         categories = sorted(set(protein_category.values()))
         red_counts, yellow_counts = _combined_counts(
@@ -173,10 +179,7 @@ def main():
     if start <= 3 <= end:
         pm.create_excel()
     if start <= 4 <= end:
-        if existing_excel:
-            pm.generate_existing_excel_plots()
-        else:
-            pm.generate_plots()
+        pm.generate_plots()
 
     print("Pipeline execution complete! All selected steps finished successfully.\n")
 
