@@ -12,16 +12,26 @@ from src.fungi_pipeline.fastas.extract_fastas import ExtractionConfig, UniProtFe
 from src.fungi_pipeline.blast.runner import FungalBlastPipeline
 from src.fungi_pipeline.excel.make_excel import read_blast_results, generate_excel
 from src.fungi_pipeline.excel.phyla import get_phylum
-from src.fungi_pipeline.plots.plots import (
-    flatten_multilevel_columns,
-    plot_category,
-    plot_a_scores,
-    plot_s_scores,
-    plot_category_counts,
-    PROTEIN_CATEGORY,
+# from src.fungi_pipeline.plots.plots_old import (
+#     flatten_multilevel_columns,
+#     plot_category,
+#     plot_a_scores,
+#     plot_s_scores,
+#     plot_category_counts,
+#     PROTEIN_CATEGORY,
+# )
+from src.fungi_pipeline.plots.plots import ( 
+    ensure_plots_dir,
+    prepare_plot_data,
+    compute_s_scores,
+    _combined_counts,
+    plot_a_score_color, plot_s_scores_color, plot_category_counts_color,
+    plot_combined_counts_color, plot_combined_counts_color_log,
+    plot_a_score_bw, plot_s_scores_bw,
+    plot_combined_counts_bw_log, plot_combined_counts_bw,
 )
 
-from src.fungi_pipeline.config import ROOT_DIR, PIPELINE_RESULTS_DIR, PIPELINE_QUERIES_DIR, SUMMARY_EXCEL_PATH
+from src.fungi_pipeline.config import ROOT_DIR, PIPELINE_RESULTS_DIR, PIPELINE_QUERIES_DIR, SUMMARY_EXCEL_PATH, PLOTS_EXPORT_DIR
 
 
 class PipelineManager:
@@ -87,6 +97,49 @@ class PipelineManager:
         plot_category_counts(df)
         print("All plots generated and saved to the /plots folder.\n")
 
+    def generate_existing_excel_plots(self):
+        print("\n[Step 4] Generating plots from existing Excel summary...")
+
+        # --- load exactly as before ---
+        df = pd.read_excel(self.excel_file)
+        df.columns = df.iloc[0]
+        df.drop([1, 2], inplace=True)
+        df = df.iloc[1:-10]
+        df.rename(columns={df.columns[0]: "Organism", df.columns[1]: "A-score"},
+                inplace=True)
+
+        # --- output sub-folders ---
+        plots_root = Path(PLOTS_EXPORT_DIR)
+        color_dir = plots_root / "color"
+        bw_dir = plots_root / "black and white"
+        ensure_plots_dir(color_dir)
+        ensure_plots_dir(bw_dir)
+
+        # --- compute shared structures once ---
+        protein_cols, colors_df, protein_category, red_rows, yellow_rows = \
+            prepare_plot_data(df)
+        s35, s75 = compute_s_scores(df, colors_df, protein_category)
+        categories = sorted(set(protein_category.values()))
+        red_counts, yellow_counts = _combined_counts(
+            colors_df, protein_category, red_rows, yellow_rows, categories)
+
+        # --- COLOR ---
+        plot_a_score_color(df, color_dir)
+        plot_s_scores_color(s35, s75, color_dir)
+        plot_category_counts_color(df, protein_cols, protein_category, color_dir)
+        plot_combined_counts_color(red_counts, yellow_counts, categories, color_dir)
+        plot_combined_counts_color_log(red_counts, yellow_counts, categories, color_dir)
+
+        # --- BLACK & WHITE ---
+        plot_a_score_bw(df, bw_dir)
+        plot_s_scores_bw(s35, s75, bw_dir)
+        plot_combined_counts_bw_log(red_counts, yellow_counts, categories, bw_dir)
+        plot_combined_counts_bw(red_counts, yellow_counts, categories, bw_dir)
+
+        print(f"All plots generated and saved to:\n  {color_dir}\n  {bw_dir}\n")
+
+
+
 
 def main():
     parser = argparse.ArgumentParser(description="Full modular fungal analysis pipeline.")
@@ -108,6 +161,10 @@ def main():
     print("\nStarting Fungal Proteome Analysis Pipeline")
     print(f"Running steps {start} → {end}")
     print("------------------------------------------------------------")
+    existing_excel = False
+    if args.excel and Path(args.excel).exists():
+        existing_excel = True
+        print(f"Using existing Excel file: {args.excel}")
 
     if start <= 1 <= end:
         pm.extract_fastas(args.orgs)
@@ -116,7 +173,10 @@ def main():
     if start <= 3 <= end:
         pm.create_excel()
     if start <= 4 <= end:
-        pm.generate_plots()
+        if existing_excel:
+            pm.generate_existing_excel_plots()
+        else:
+            pm.generate_plots()
 
     print("Pipeline execution complete! All selected steps finished successfully.\n")
 

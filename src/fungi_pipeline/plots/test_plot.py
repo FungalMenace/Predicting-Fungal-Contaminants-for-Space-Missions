@@ -5,7 +5,7 @@ created by `make_summary_excel.py`.
 
 import argparse
 import pandas as pd
-from src.fungi_pipeline.plots.plots import (
+from src.fungi_pipeline.plots.plots_old import (
     PROTEIN_CATEGORY,
     flatten_multilevel_columns,
     plot_category,

@@ -27,7 +27,7 @@ paths:
 
   # Plotting & Reporting Pipeline Paths
   summary_excel: "src/fungi_pipeline/excel/fungal_summary.xlsx"
-  plots_export_dir: "src/fungi_pipeline/plots/plots"
+  plots_export_dir: "src/fungi_pipeline/plots/plots_rerun"
 
   pipeline_results_dir: "src/results"
   pipeline_queries_dir: "data/proteomes/queries"

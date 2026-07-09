@@ -52,3 +52,5 @@ PIPELINE_QUERIES_DIR = ROOT_DIR / _config['paths'].get('pipeline_queries_dir', '
 MERGED_SUMMARY_PATH = ROOT_DIR / _config['paths'].get('merged_summary_excel', 'src/results/merged_summary.xlsx')
 
 FINAL_EXTRACTED_FASTAS_DIR = ROOT_DIR / "src" / "fungi_pipeline" / "fastas" / "final_extracted_fastas"
+
+PLOTS_EXPORT_DIR = ROOT_DIR / _config['paths'].get('plots_export_dir', 'src/results/plots')
