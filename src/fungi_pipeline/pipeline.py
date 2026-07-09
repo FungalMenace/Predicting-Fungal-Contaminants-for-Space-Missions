@@ -12,14 +12,14 @@ from src.fungi_pipeline.fastas.extract_fastas import ExtractionConfig, UniProtFe
 from src.fungi_pipeline.blast.runner import FungalBlastPipeline
 from src.fungi_pipeline.excel.make_excel import read_blast_results, generate_excel
 from src.fungi_pipeline.excel.phyla import get_phylum
-# from src.fungi_pipeline.plots.plots_old import (
-#     flatten_multilevel_columns,
-#     plot_category,
-#     plot_a_scores,
-#     plot_s_scores,
-#     plot_category_counts,
-#     PROTEIN_CATEGORY,
-# )
+from src.fungi_pipeline.plots.plots_old import (
+    flatten_multilevel_columns,
+    plot_category,
+    plot_a_scores,
+    plot_s_scores,
+    plot_category_counts,
+    PROTEIN_CATEGORY,
+)
 from src.fungi_pipeline.plots.plots import ( 
     ensure_plots_dir,
     prepare_plot_data,
