@@ -59,7 +59,7 @@ python -m src.fungi_pipeline.utils \
 
 This will generate a unified folder named `final_extracted_fastas/`.
 
-`Google drive link containing fasta files`: https://drive.google.com/file/d/10jYxRd_zEn0Un9JdEQmP9L_zIFwuP0sy/view?usp=share_link
+`Google drive link containing fasta files`: https://drive.google.com/file/d/1bivpIkgM9fG0sDUeGFLEq0gKO59mQw_S/view?usp=share_link.
 
 ### 📝 Note on FASTA Retrieval and Database Mapping
 
