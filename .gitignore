@@ -7,4 +7,6 @@
 *.ptf
 *.pto
 
-
+/src/results/
+/example/
+/src/fungi_pipeline/plots/plots_rerun

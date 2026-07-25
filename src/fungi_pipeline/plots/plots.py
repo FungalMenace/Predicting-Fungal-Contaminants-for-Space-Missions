@@ -207,6 +207,8 @@ def plot_combined_counts_color(red_counts, yellow_counts, categories, save_path)
     plt.tight_layout()
     for bar in list(bars_red) + list(bars_yellow):
         h = bar.get_height()
+        if h <= 0:
+            continue
         plt.text(bar.get_x() + bar.get_width() / 2, h, str(int(h)),
                  ha='center', va='bottom', fontsize=12)
     plt.savefig(Path(save_path) / "Red_Yellow_rows_category_counts_combined.png")
@@ -234,6 +236,8 @@ def plot_combined_counts_color_log(red_counts, yellow_counts, categories, save_p
     plt.yscale('log')
     for bar in list(bars_orange) + list(bars_red):
         h = bar.get_height()
+        if h <= 0:
+            continue
         plt.text(bar.get_x() + bar.get_width() / 2, h, str(int(h)),
                  ha='center', va='bottom', fontsize=11)
     plt.savefig(Path(save_path) / "Orange_Red_rows_category_counts_combined_modified.png",
@@ -312,6 +316,8 @@ def plot_combined_counts_bw_log(red_counts, yellow_counts, categories, save_path
     plt.yticks(fontsize=14)
     for bar in list(bars_high) + list(bars_low):
         h = bar.get_height()
+        if h <= 0:
+            continue
         plt.text(bar.get_x() + bar.get_width() / 2, h, str(int(h)),
                  ha='center', va='bottom', fontsize=11)
     plt.savefig(Path(save_path) / "Red_Yellow_rows_category_counts_combined_bw_modified.png",
@@ -340,6 +346,8 @@ def plot_combined_counts_bw(red_counts, yellow_counts, categories, save_path):  
     plt.tight_layout()
     for bar in list(bars_moderate) + list(bars_high):
         h = bar.get_height()
+        if h <= 0:
+            continue
         plt.text(bar.get_x() + bar.get_width() / 2, h, str(int(h)),
                  ha='center', va='bottom', fontsize=24)
     plt.savefig(Path(save_path) / "BW_rows_category_counts_combined.png",

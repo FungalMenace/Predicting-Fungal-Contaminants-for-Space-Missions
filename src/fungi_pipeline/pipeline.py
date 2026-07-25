@@ -110,6 +110,7 @@ class PipelineManager:
 
         df.reset_index(drop=True, inplace=True)
         df["A-score"] = pd.to_numeric(df["A-score"], errors="coerce")
+        print(df)
 
         # --- output sub-folders ---
         plots_root = Path(PLOTS_EXPORT_DIR)
@@ -121,9 +122,9 @@ class PipelineManager:
         # --- compute shared structures once ---
         protein_cols, colors_df, protein_category, red_rows, yellow_rows = \
             prepare_plot_data(df)
-        print(df.shape)
-        print(df.columns.tolist())
-        print(protein_cols)
+        # print(df.shape)
+        # print(df.columns.tolist())
+        # print(protein_cols)
         s35, s75 = compute_s_scores(df, colors_df, protein_category)
         categories = sorted(set(protein_category.values()))
         red_counts, yellow_counts = _combined_counts(
