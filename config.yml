@@ -26,9 +26,9 @@ paths:
   orthodb_excel_out: "src/fungi_pipeline/orthodb/orthodb_results/fungi_from_orthologs.xlsx"
 
   # Plotting & Reporting Pipeline Paths
-  summary_excel: "src/fungi_pipeline/excel/fungal_summary.xlsx"
+  summary_excel: "src/fungi_pipeline/excel/fungal_summary_2.xlsx"
   plots_export_dir: "paper_plots"
 
-  pipeline_results_dir: "src/results"
+  pipeline_results_dir: "src/results_2"
   pipeline_queries_dir: "data/proteomes/queries"
-  merged_summary_excel: "src/results/merged_summary.xlsx"
+  merged_summary_excel: "src/results_2/merged_summary.xlsx"

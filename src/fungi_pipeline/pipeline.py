@@ -110,7 +110,6 @@ class PipelineManager:
 
         df.reset_index(drop=True, inplace=True)
         df["A-score"] = pd.to_numeric(df["A-score"], errors="coerce")
-        print(df)
 
         # --- output sub-folders ---
         plots_root = Path(PLOTS_EXPORT_DIR)
