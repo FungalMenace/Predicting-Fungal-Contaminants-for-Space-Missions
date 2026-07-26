@@ -98,3 +98,5 @@ Google Drive link:
 ```text
 <ADD_LINK_HERE>
 ```
+
+Please checkout part-2 readme next: `tmp/part-2/README.md`.
