@@ -101,18 +101,18 @@ https://drive.google.com/file/d/1qoUnjwKEnKdnvfXBeavwgTYfeIKzgM-X/view?usp=share
 
 ---
 
-## 6. Updated `fungi_organisms_with_sequences.csv`
+## 6. Updated `fungi_organisms_with_sequences_part2.csv`
 
 A new version of:
 
 ```text
-fungi_organisms_with_sequences.csv
+fungi_organisms_with_sequences_part2.csv
 ```
 
 containing sequence data for **1,553 organisms × 25 query proteins** is available at:
 
 ```text
-<ADD_LINK_HERE>
+https://drive.google.com/file/d/1VCb1gp_tvKp9C1epiAP5yUm2y_4q85vn/view?usp=share_link
 ```
 
 ---

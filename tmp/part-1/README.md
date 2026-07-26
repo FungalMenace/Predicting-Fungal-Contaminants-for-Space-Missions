@@ -81,12 +81,12 @@ https://drive.google.com/file/d/1L1xl-l6_Dsde8SoEGljtNBqvHiV_G5ic/view?usp=share
 
 ---
 
-## 6. Updated `fungi_organisms_with_sequences.csv`
+## 6. Updated `fungi_organisms_with_sequences_part1.csv`
 
 Since several proteomes changed, the sequence extraction step was rerun and a new version of:
 
 ```text
-fungi_organisms_with_sequences.csv
+fungi_organisms_with_sequences_part1.csv
 ```
 
 was generated.
@@ -96,7 +96,7 @@ This file contains sequence data for **1,582 organisms × 25 query proteins**.
 Google Drive link:
 
 ```text
-<ADD_LINK_HERE>
+https://drive.google.com/file/d/1aiRK8Y6yfYHd6jFLtkJ3Yw3Dwk-1aci5/view?usp=share_link
 ```
 
 Please checkout part-2 readme next: `tmp/part-2/README.md`.
