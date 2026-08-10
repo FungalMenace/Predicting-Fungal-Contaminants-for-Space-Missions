@@ -5,7 +5,7 @@
 
 > **Official repository for the paper:** *"Predicting Fungal Contaminants for Space Missions Using Proteome-Wide Screening for Protein Orthologs"* by Ashish Mahabal, Vannsh Jani, S. George Djorgovski, Nitin K. Singh, and Swati Bijlani.
 
-![Data Flow Sankey Diagram](images/sankey_revised.png)
+![Data Flow Sankey Diagram](images/fungi_sankey_layered_color.png)
 
 ## Overview
 
@@ -22,8 +22,9 @@ The pipeline performs end-to-end proteome analysis:
 
 ## 💾 Data Availability
 
-* **Metadata & Provenance:** The detailed source, protein sequences for all 1583 organisms evaluated in this study can be found at: https://drive.google.com/file/d/11hDEgnUsS9wG8dHScGen935_vIWm4LlV/view?usp=share_link.
-* **FASTA Files:** The full set of 1583 fungal proteome FASTA files can be downloaded at: https://drive.google.com/file/d/1bivpIkgM9fG0sDUeGFLEq0gKO59mQw_S/view?usp=share_link.
+* **Metadata & Provenance:** The detailed source, protein sequences for all 1553 organisms evaluated in this study can be found at: https://doi.org/10.22002/rttgr-mmc07
+* **FASTA Files:** The full set of fungal proteome FASTA files for this study can be downloaded from the same location.
+* **Synonyms & duplicates:** Where an organism appeared under more than one name or strain designation, entries were consolidated to a single accepted taxonomic name; the alias → accepted-name mapping is recorded in `synonyms.csv` in the same record.
 
 ---
 
@@ -33,8 +34,8 @@ To set up the pipeline locally:
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/VannshJani/Predicting-Fungal-Contaminants-for-Space-Missions.git
-cd Fungi-Space-Contamination-Pipeline
+git clone git@github.com:FungalMenace/Predicting-Fungal-Contaminants-for-Space-Missions.git
+cd Predicting-Fungal-Contaminants-for-Space-Missions
 
 # 2. Set up a virtual environment
 python3 -m venv venv
@@ -53,15 +54,15 @@ Depending on your use case, we have divided the documentation into three dedicat
 
 ### 1. [Reproducing the Paper Results](docs/REPRODUCING.md)
 
-Step-by-step instructions on how to use the scripts in the `src/` folder to download the 1583 FASTA files, run the BLASTp alignments, calculate the scores, and generate the exact plots and Excel summaries presented in our study.
+Step-by-step instructions on how to use the scripts in the `src/` folder to download the 1553 FASTA files, run the BLASTp alignments, calculate the scores, and generate the exact plots and Excel summaries presented in our study.
 
 ### 2. [Extending the Pipeline (General Use)](docs/EXTENSION.md)
 
 Instructions for researchers who want to use this pipeline for their own data. Learn how to add new fungal FASTA files, input different query proteins, and generate custom contamination potential reports.
 
-### 3. [Streamlit Interactive Web App](docs/STREAMLIT_GUIDE.md)
+### 3. [Interactive Web App](docs/APP_GUIDE.md)
 
-Information on how to access and use our interactive web application to search for specific species or upload your own data for dynamic scoring.
+Information on how to access and use our interactive web application to search for specific species or upload your own data for dynamic scoring — try it live at **https://sites.astro.caltech.edu/checkfungalcontam/**.
 
 ---
 
@@ -79,6 +80,10 @@ If you use this code or our dataset in your research, please cite our paper:
 
 ```
 
+## License
+
+Code in this repository is released under the **MIT License** (see [`LICENSE`](LICENSE)). The dataset — the curated organism/protein tables, FASTA proteomes, and derived figures — is licensed **CC BY 4.0**, consistent with the CaltechDATA record ([10.22002/rttgr-mmc07](https://doi.org/10.22002/rttgr-mmc07)).
+
 ## Contact
 
-For questions regarding the code or query FASTA files, please open an issue or contact [Vannsh Jani / Ashish Mahabal - add emails].
+For questions regarding the code or query FASTA files, please open an issue or contact [Vannsh Jani / Ashish Mahabal].

@@ -16,7 +16,7 @@ Before starting, ensure you have completed the installation steps in the [Main R
 
 ## Step 1: Extract and Merge FASTAs
 
-The 1583 fungal organisms in our dataset are distributed across multiple databases. We must extract them sequentially.
+The 1553 fungal organisms in our dataset are distributed across multiple databases. We must extract them sequentially.
 *(Note: If you downloaded the pre-compiled FASTA files via the Caltech Library DOI linked in the main README, you can skip to Step 2).*
 
 **1a. Extract from JGI Genome Portal (GOLD species list):**
@@ -59,7 +59,7 @@ python -m src.fungi_pipeline.utils \
 
 This will generate a unified folder named `final_extracted_fastas/`.
 
-`Google drive link containing fasta files`: https://drive.google.com/file/d/1bivpIkgM9fG0sDUeGFLEq0gKO59mQw_S/view?usp=share_link.
+The compiled FASTA files (all 1553 proteomes) are also available from the CaltechDATA record: https://doi.org/10.22002/rttgr-mmc07
 
 ### 📝 Note on FASTA Retrieval and Database Mapping
 
@@ -116,7 +116,7 @@ python -m src.fungi_pipeline.utils \
 
 ```
 
-*(Replace the paths with the actual locations of your generated Excel files from Steps 2 and 3).* This generates the `final.xlsx` matrix containing the complete S-score and A-score data for all 1583 organisms.
+*(Replace the paths with the actual locations of your generated Excel files from Steps 2 and 3).* This generates the `final.xlsx` matrix containing the complete S-score and A-score data for all 1553 organisms.
 
 ---
 
