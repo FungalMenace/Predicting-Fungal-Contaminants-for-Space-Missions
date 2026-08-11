@@ -97,15 +97,7 @@ def compute_s_scores(df, colors_df, protein_category):
 
 
 def _combined_counts(colors_df, protein_category, red_rows, yellow_rows, categories):
-    """Per-category counts using the original red/yellow row grouping.
-
-    NOTE:
-    - red_counts: organisms with a high-confidence ortholog in this category.
-    - yellow_counts: organisms with a moderate ortholog in this category,
-      but ONLY if the organism has no high-confidence ortholog anywhere.
-
-    This is the original methodology that produces the smaller moderate counts.
-    """
+    """Per-category counts of red rows / yellow rows (cells 17-20)."""
     red_counts, yellow_counts = {}, {}
     for cat in categories:
         cat_cols = [col for col, c in protein_category.items() if c == cat]
@@ -113,48 +105,6 @@ def _combined_counts(colors_df, protein_category, red_rows, yellow_rows, categor
             lambda r: any(c == 'red' for c in r), axis=1).sum()
         yellow_counts[cat] = colors_df.loc[yellow_rows, cat_cols].apply(
             lambda r: any(c == 'yellow' for c in r), axis=1).sum()
-    return red_counts, yellow_counts
-
-
-def _independent_category_counts(colors_df, protein_category, categories):
-    """Count high and moderate organisms independently within each category.
-
-    Unlike _combined_counts(), this function does NOT use red_rows/yellow_rows.
-
-    For every category separately:
-      - High    = organism has >=1 red protein in that category.
-      - Moderate = organism has >=1 yellow protein in that category.
-
-    Therefore, an organism can contribute to multiple categories and can be
-    moderate in one category even if it is high in another category.
-
-    Example:
-        AMR = moderate, Thermophile = high
-
-    The organism is counted in:
-        AMR -> moderate
-        Thermophile -> high
-
-    This is the larger per-category count requested for Table 6 / Fig. 4b.
-    """
-    red_counts, yellow_counts = {}, {}
-
-    for cat in categories:
-        cat_cols = [col for col, c in protein_category.items() if c == cat]
-
-        # Look at ALL organisms for this category.
-        category_colors = colors_df[cat_cols]
-
-        # High: independent of what happens in any other category.
-        red_counts[cat] = category_colors.apply(
-            lambda r: any(c == 'red' for c in r), axis=1
-        ).sum()
-
-        # Moderate: independent of what happens in any other category.
-        yellow_counts[cat] = category_colors.apply(
-            lambda r: any(c == 'yellow' for c in r), axis=1
-        ).sum()
-
     return red_counts, yellow_counts
 
 
@@ -429,69 +379,20 @@ def generate_existing_excel_plots(self):
         prepare_plot_data(df)
     s35, s75 = compute_s_scores(df, colors_df, protein_category)
     categories = sorted(set(protein_category.values()))
-    # Original counts (smaller moderate numbers).
     red_counts, yellow_counts = _combined_counts(
         colors_df, protein_category, red_rows, yellow_rows, categories)
-
-    # Independent per-category counts (larger moderate numbers).
-    independent_red_counts, independent_yellow_counts = _independent_category_counts(
-        colors_df, protein_category, categories)
 
     # --- COLOR ---
     plot_a_score_color(df, color_dir)
     plot_s_scores_color(s35, s75, color_dir)
     plot_category_counts_color(df, protein_cols, protein_category, color_dir)
-
-    # Original plots are kept unchanged.
-    plot_combined_counts_color(
-        red_counts, yellow_counts, categories, color_dir)
-    plot_combined_counts_color_log(
-        red_counts, yellow_counts, categories, color_dir)
-
-    # NEW: independent per-category plots for Table 6 / Fig. 4b.
-    plot_combined_counts_color(
-        independent_red_counts,
-        independent_yellow_counts,
-        categories,
-        color_dir / "independent"
-    )
-    plot_combined_counts_color_log(
-        independent_red_counts,
-        independent_yellow_counts,
-        categories,
-        color_dir / "independent"
-    )
+    plot_combined_counts_color(red_counts, yellow_counts, categories, color_dir)
+    plot_combined_counts_color_log(red_counts, yellow_counts, categories, color_dir)
 
     # --- BLACK & WHITE ---
     plot_a_score_bw(df, bw_dir)
     plot_s_scores_bw(s35, s75, bw_dir)
-
-    # Original plots are kept unchanged.
-    plot_combined_counts_bw_log(
-        red_counts, yellow_counts, categories, bw_dir)
-    plot_combined_counts_bw(
-        red_counts, yellow_counts, categories, bw_dir)
-
-    # NEW: independent per-category plots for Table 6 / Fig. 4b.
-    plot_combined_counts_bw_log(
-        independent_red_counts,
-        independent_yellow_counts,
-        categories,
-        bw_dir / "independent"
-    )
-    plot_combined_counts_bw(
-        independent_red_counts,
-        independent_yellow_counts,
-        categories,
-        bw_dir / "independent"
-    )
-
-    print("\nIndependent per-category counts:")
-    for cat in categories:
-        print(
-            f"  {CATEGORY_ABBR.get(cat, cat)}: "
-            f"Moderate={independent_yellow_counts[cat]}, "
-            f"High={independent_red_counts[cat]}"
-        )
+    plot_combined_counts_bw_log(red_counts, yellow_counts, categories, bw_dir)
+    plot_combined_counts_bw(red_counts, yellow_counts, categories, bw_dir)
 
     print(f"All plots generated and saved to:\n  {color_dir}\n  {bw_dir}\n")

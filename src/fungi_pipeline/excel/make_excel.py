@@ -116,9 +116,9 @@ HEADER_INFO = [
 ]
 
 
-RED_FILL = PatternFill("solid", fgColor="FF6347")     # >75
-YELLOW_FILL = PatternFill("solid", fgColor="FFD700")  # >35
-BLUE_FILL = PatternFill("solid", fgColor="87CEFA")    # ≤35
+RED_FILL = PatternFill("solid", fgColor="FF6347")     # >=75
+YELLOW_FILL = PatternFill("solid", fgColor="FFD700")  # >=35
+BLUE_FILL = PatternFill("solid", fgColor="87CEFA")    # <35
 
 
 
@@ -264,15 +264,15 @@ def generate_excel(
 
             cat = next(c for c, p, _, _ in HEADER_INFO if p == prot)
             if cat in FEATURES:
-                if val > 75:
+                if val >= 75:
                     cat_red[cat] += 1
-                elif val > 35:
+                elif val >= 35:
                     cat_yellow[cat] += 1
 
-            if val > 75:
+            if val >= 75:
                 c.fill = RED_FILL
                 row_red += 1
-            elif val > 35:
+            elif val >= 35:
                 c.fill = YELLOW_FILL
                 row_yellow += 1
             else:

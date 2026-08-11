@@ -25,6 +25,7 @@ from src.fungi_pipeline.plots.plots import (
     prepare_plot_data,
     compute_s_scores,
     _combined_counts,
+    _independent_category_counts,
     plot_a_score_color, plot_s_scores_color, plot_category_counts_color,
     plot_combined_counts_color, plot_combined_counts_color_log,
     plot_a_score_bw, plot_s_scores_bw,
@@ -87,6 +88,9 @@ class PipelineManager:
     def generate_plots(self):
         print("\n[Step 4] Generating plots from existing Excel summary...")
 
+        if (not self.excel_file.exists()):
+            raise FileNotFoundError(f"Excel summary file not found: {self.excel_file}")
+
         # Read Excel using row 2 as the column names
         df = pd.read_excel(self.excel_file, header=1)
 
@@ -98,6 +102,9 @@ class PipelineManager:
 
         if len(summary_idx) > 0:
             df = df.loc[:summary_idx[0] - 1]
+        df = df.iloc[:-10].copy()
+
+        print(f"Data shape after trimming: {df.shape}")
 
         # Rename first two columns
         df.rename(
@@ -128,6 +135,10 @@ class PipelineManager:
         categories = sorted(set(protein_category.values()))
         red_counts, yellow_counts = _combined_counts(
             colors_df, protein_category, red_rows, yellow_rows, categories)
+        
+        # Independent per-category counts (larger moderate numbers).
+        independent_red_counts, independent_yellow_counts = _independent_category_counts(
+            colors_df, protein_category, categories)
 
         # --- COLOR ---
         plot_a_score_color(df, color_dir)
@@ -135,12 +146,36 @@ class PipelineManager:
         plot_category_counts_color(df, protein_cols, protein_category, color_dir)
         plot_combined_counts_color(red_counts, yellow_counts, categories, color_dir)
         plot_combined_counts_color_log(red_counts, yellow_counts, categories, color_dir)
+        plot_combined_counts_color(
+            independent_red_counts,
+            independent_yellow_counts,
+            categories,
+            color_dir / "independent"
+        )
+        plot_combined_counts_color_log(
+            independent_red_counts,
+            independent_yellow_counts,
+            categories,
+            color_dir / "independent"
+        )
 
         # --- BLACK & WHITE ---
         plot_a_score_bw(df, bw_dir)
         plot_s_scores_bw(s35, s75, bw_dir)
         plot_combined_counts_bw_log(red_counts, yellow_counts, categories, bw_dir)
         plot_combined_counts_bw(red_counts, yellow_counts, categories, bw_dir)
+        plot_combined_counts_bw_log(
+            independent_red_counts,
+            independent_yellow_counts,
+            categories,
+            bw_dir / "independent"
+        )
+        plot_combined_counts_bw(
+            independent_red_counts,
+            independent_yellow_counts,
+            categories,
+            bw_dir / "independent"
+        )
 
         print(f"All plots generated and saved to:\n  {color_dir}\n  {bw_dir}\n")
 
@@ -170,6 +205,7 @@ def main():
     existing_excel = False
     if args.excel and Path(args.excel).exists():
         existing_excel = True
+        pm.excel_file = Path(args.excel)
         print(f"Using existing Excel file: {args.excel}")
 
     if start <= 1 <= end:
