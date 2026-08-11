@@ -36,9 +36,9 @@ def cell_color(val):
     if val is None or pd.isna(val) or ',' in str(val):
         return 'blue'
     val = float(val)
-    if val > 75:
+    if val >= 75:
         return 'red'
-    elif val > 35:
+    elif val >= 35:
         return 'yellow'
     else:
         return 'blue'
@@ -221,8 +221,8 @@ def plot_category_counts_color(df, protein_cols, protein_category, save_path):  
     plt.figure(figsize=(12, 6))
     plt.bar(categories, [category_counts_75[c] for c in categories],
             color='red', alpha=0.7)
-    plt.ylabel('Number of Organisms with at least one protein > 75% identity')
-    plt.title('Organisms with at least one protein > 75% identity per Category')
+    plt.ylabel('Number of Organisms with at least one protein >= 75% identity')
+    plt.title('Organisms with at least one protein >= 75% identity per Category')
     plt.xticks(rotation=45, ha='right')
     plt.tight_layout()
     plt.savefig(Path(save_path) / "Category_counts_75.png")
@@ -231,8 +231,8 @@ def plot_category_counts_color(df, protein_cols, protein_category, save_path):  
     plt.figure(figsize=(12, 6))
     plt.bar(categories, [category_counts_35[c] for c in categories],
             color='orange', alpha=0.7)
-    plt.ylabel('Number of Organisms with at least one protein > 35% identity')
-    plt.title('Organisms with at least one protein > 35% identity per Category')
+    plt.ylabel('Number of Organisms with at least one protein >= 35% identity')
+    plt.title('Organisms with at least one protein >= 35% identity per Category')
     plt.xticks(rotation=45, ha='right')
     plt.tight_layout()
     plt.savefig(Path(save_path) / "Category_counts_35.png")
@@ -332,7 +332,7 @@ def plot_s_scores_bw(s_scores_35, s_scores_75, save_path):   # cell 8
     plt.figure(figsize=(10, 6))
     plt.hist(s_scores_75, bins=np.arange(0, 9) - 0.5, color='white',
              edgecolor='black', hatch='\\\\\\', label='Threshold \u2265 75')
-    plt.xlabel("S-score (threshold > 75)", fontsize=20)
+    plt.xlabel("S-score (threshold >= 75)", fontsize=20)
     plt.ylabel("Number of Organisms", fontsize=20)
     plt.xticks(range(0, 7), fontsize=20)
     plt.yticks(fontsize=20)
