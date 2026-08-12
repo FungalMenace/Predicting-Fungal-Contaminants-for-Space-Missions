@@ -1,0 +1,69 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite both the software (below) and the paper listed under preferred-citation."
+title: "Predicting Fungal Contaminants for Space Missions: proteome-wide ortholog screening pipeline"
+abstract: >-
+  A scalable, automated Python pipeline for identifying fungi with adaptation
+  potential to spaceflight-associated stress conditions and pathogenicity risks.
+  The pipeline extracts proteomes from UniProt, NCBI, JGI GOLD, and OrthoDB, runs
+  BLASTp comparisons against reference sets of 25 stress-resistance proteins,
+  summarizes results into identity-based S-score and A-score measures, annotates
+  each organism with its taxonomic phylum, and generates the analytical matrices
+  and visualizations presented in the accompanying paper.
+type: software
+version: 1.0.0
+date-released: 2026-08-12
+license: MIT
+repository-code: "https://github.com/FungalMenace/Predicting-Fungal-Contaminants-for-Space-Missions"
+keywords:
+  - fungal contamination
+  - planetary protection
+  - astrobiology
+  - spacecraft microbiology
+  - proteome screening
+  - protein orthologs
+  - BLASTp
+authors:
+  - family-names: Mahabal
+    given-names: Ashish
+    affiliation: "California Institute of Technology"
+    # orcid: "https://orcid.org/0000-0003-2242-0244"
+  - family-names: Jani
+    given-names: Vannsh
+    affiliation: "Indian Institute of Technology Gandhinagar"
+    # orcid: "https://orcid.org/0009-0004-8348-289X"
+  - family-names: Djorgovski
+    given-names: S. George
+    affiliation: "California Institute of Technology"
+    # orcid: "https://orcid.org/0000-0002-0603-3087"
+  - family-names: Singh
+    given-names: Nitin K.
+    affiliation: "California Department of Industrial Relations"
+    # orcid: "https://orcid.org/0000-0001-5344-1190"
+  - family-names: Bijlani
+    given-names: Swati
+    affiliation: "Beckman Research Institute of the City of Hope"
+    # orcid: "https://orcid.org/0000-0002-1846-7878"
+references:
+  - type: data
+    title: "Curated fungal proteome dataset (1,553 organisms)"
+    doi: "10.22002/rttgr-mmc07"
+    authors:
+      - family-names: Mahabal
+        given-names: Ashish
+preferred-citation:
+  type: article
+  title: "Predicting Fungal Contaminants for Space Missions Using Proteome-Wide Screening for Protein Orthologs"
+  journal: "Astrobiology"
+  year: 2026
+  # doi: "TODO — add once the paper DOI is assigned"
+  authors:
+    - family-names: Mahabal
+      given-names: Ashish
+    - family-names: Jani
+      given-names: Vannsh
+    - family-names: Djorgovski
+      given-names: S. George
+    - family-names: Singh
+      given-names: Nitin K.
+    - family-names: Bijlani
+      given-names: Swati
