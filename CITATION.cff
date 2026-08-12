@@ -26,23 +26,23 @@ authors:
   - family-names: Mahabal
     given-names: Ashish
     affiliation: "California Institute of Technology"
-    # orcid: "https://orcid.org/0000-0003-2242-0244"
+    orcid: "https://orcid.org/0000-0003-2242-0244"
   - family-names: Jani
     given-names: Vannsh
     affiliation: "Indian Institute of Technology Gandhinagar"
-    # orcid: "https://orcid.org/0009-0004-8348-289X"
+    orcid: "https://orcid.org/0009-0004-8348-289X"
   - family-names: Djorgovski
     given-names: S. George
     affiliation: "California Institute of Technology"
-    # orcid: "https://orcid.org/0000-0002-0603-3087"
+    orcid: "https://orcid.org/0000-0002-0603-3087"
   - family-names: Singh
     given-names: Nitin K.
     affiliation: "California Department of Industrial Relations"
-    # orcid: "https://orcid.org/0000-0001-5344-1190"
+    orcid: "https://orcid.org/0000-0001-5344-1190"
   - family-names: Bijlani
     given-names: Swati
     affiliation: "Beckman Research Institute of the City of Hope"
-    # orcid: "https://orcid.org/0000-0002-1846-7878"
+    orcid: "https://orcid.org/0000-0002-1846-7878"
 references:
   - type: data
     title: "Curated fungal proteome dataset (1,553 organisms)"

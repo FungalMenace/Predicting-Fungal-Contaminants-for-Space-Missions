@@ -1,0 +1,31 @@
+name: Archive release in CaltechDATA
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Tag of the release to archive (blank = latest)"
+        required: false
+      draft:
+        description: "Leave the CaltechDATA record as a draft"
+        type: boolean
+        default: true
+
+jobs:
+  archive:
+    name: Send release to CaltechDATA
+    runs-on: ubuntu-latest
+    steps:
+      - uses: caltechlibrary/iga@v1
+        with:
+          INVENIO_SERVER: https://data.caltech.edu
+          INVENIO_TOKEN: ${{ secrets.INVENIO_TOKEN }}
+          all_assets: true
+          all_metadata: true
+          debug: false
+          draft: true
+          community: none
+          parent_record: none
+          release_tag: ${{ inputs.release_tag }}
